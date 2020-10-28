@@ -10,6 +10,7 @@
 #include <avr/interrupt.h>
 
 #define THRESHOLD_VOLTAGE 600
+#define TEST_PIN REGISTER_BIT(PORTD, 1) // testing
 
 unsigned int timecount0;
 int time_delay = 40;
