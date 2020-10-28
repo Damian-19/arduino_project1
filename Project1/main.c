@@ -23,6 +23,8 @@ void init(int timecount)
 	//Set PortD to all outputs because LEDs are connected to this PORT
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
 	PORTD = 0;		// Initialise to all off
+	DDRB = 0b00000000;
+	PORTB = 0;
 	
 	timecount0 = timecount;
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
