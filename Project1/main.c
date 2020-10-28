@@ -74,15 +74,16 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
 	
 	adc_reading = ADC;   /* ADC is in Free Running Mode - you don't have to set up anything for 
 						    the next conversion */
-	if (adc_reading != 0)
+	if (adc_reading != 0) // check if new adc reading available
 	{
-		adc_flag = 1;
+		adc_flag = 1; // set flag
 	}
-	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) & (adc_reading > 0))
+	
+	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) & (adc_reading > 0)) // check adc voltage is between 0V-2.5V
 	{
-		time_delay = 40;
-	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) & (adc_reading > LOWER_THRESHOLD_VOLTAGE))
+		time_delay = 40; // set time delay
+	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) & (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
 	{
-		time_delay = 20;
+		time_delay = 20; // set time delay
 	}
 }
