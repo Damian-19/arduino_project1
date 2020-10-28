@@ -19,9 +19,12 @@ int tcnt0_start = 125;
 uint16_t adc_flag = 0;
 uint16_t adc_reading;
 
-unsigned char upDown = 1;
-unsigned char cylon = 0;
+unsigned char direction = 1; // 1 indicates up, 0 indicates down, initialize to 1
+unsigned char active_led = 0; // sets the current led on
 
+/***************************
+*initialization function 
+***************************/
 void init(void)
 {
 	//Set PortD to all outputs because LEDs are connected to this PORT
@@ -50,10 +53,27 @@ void init(void)
 	sei();				// Global interrupt enable (I=1)
 }
 
-void loop()
+/*********************************
+*looping cylon pattern function
+*********************************/
+void cylon_loop(void)
 {
-	
+	// cylon pattern
+	if (direction == 1) { // check if direction is up
+		active_led++; // increment the active led
+		if (active_led >= 7) { // check if led has reached end (pin 7)
+			direction = 0; // set direction to down
+		}
+		PORTD = 0b00000001 << active_led; // set pin of portd to current led
+		} else if (direction == 0) { // check if direction is down
+		active_led--; // decrement the active led
+		if (active_led == 0) { // check if led has reached the start (pin 0)
+			direction = 1; // set direction to up
+		}
+		PORTD = 0b00000001 << active_led; // set pin of portd to current led
+	}
 }
+
 int main(void)
 {
 	init();
@@ -72,18 +92,9 @@ ISR(TIMER0_OVF_vect)
 	TCNT0 = tcnt0_start;		// set to 
 	++timecount0;	// count the number of times the interrupt has been reached
 	
-	if (timecount0 >= time_delay)	
+	if (timecount0 >= time_delay)	// check if amount of overflows equals adc setting
 	{
-		if (upDown == 1) {
-			cylon++;
-			if (cylon >= 7) upDown = 0;
-		} 
-		else {
-			cylon--;
-			if (cylon == 0) upDown = 1;
-		}
-		PORTD = 1 << cylon;
-		//PORTD = ~PORTD;		 Toggle all the bits
+		cylon_loop();
 		timecount0 = 0;		// Restart the overflow counter
 	}
 }
