@@ -1,8 +1,8 @@
 /*
- * Timer0_Ex.c
+ * main.c
  *
- * Created: 09/10/2013 23:37:12
- *  Author: Ciaran
+ * Created: 28/10/2020 
+ *  Author: Damian
  */ 
 
 
