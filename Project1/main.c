@@ -19,6 +19,9 @@ int tcnt0_start = 125;
 uint16_t adc_flag = 0;
 uint16_t adc_reading;
 
+unsigned char upDown = 1;
+unsigned char cylon = 0;
+
 void init(void)
 {
 	//Set PortD to all outputs because LEDs are connected to this PORT
@@ -47,6 +50,10 @@ void init(void)
 	sei();				// Global interrupt enable (I=1)
 }
 
+void loop()
+{
+	
+}
 int main(void)
 {
 	init();
@@ -67,7 +74,16 @@ ISR(TIMER0_OVF_vect)
 	
 	if (timecount0 >= time_delay)	
 	{
-		PORTD = ~PORTD;		// Toggle all the bits
+		if (upDown == 1) {
+			cylon++;
+			if (cylon >= 7) upDown = 0;
+		} 
+		else {
+			cylon--;
+			if (cylon == 0) upDown = 1;
+		}
+		PORTD = 1 << cylon;
+		//PORTD = ~PORTD;		 Toggle all the bits
 		timecount0 = 0;		// Restart the overflow counter
 	}
 }
