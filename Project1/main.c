@@ -14,11 +14,12 @@
 #define TEST_PIN REGISTER_BIT(PORTD, 1) // testing
 
 unsigned int timecount0;
-int time_delay = 40;
+int time_delay = 0;
+int tcnt0_start = 125;
 uint16_t adc_flag = 0;
 uint16_t adc_reading;
 
-void init(int timecount)
+void init(void)
 {
 	//Set PortD to all outputs because LEDs are connected to this PORT
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
@@ -26,12 +27,12 @@ void init(int timecount)
 	DDRB = 0b00000000;
 	PORTB = 0;
 	
-	timecount0 = timecount;
+	timecount0 = 0;
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
 	
 	TCCR0A = 0;			// Not strictly necessary as these are the reset states but it's good
 	// practice to show what you're doing
-	TCNT0 = 61;			// Recall: 256-61 = 195 & 195*64us = 12.48ms, approx 12.5ms
+	TCNT0 = tcnt0_start;			// Recall: 256-61 = 195 & 195*64us = 12.48ms, approx 12.5ms
 	TIMSK0 = (1<<TOIE0);	// Enable Timer 0 interrupt
 	
 	// ADC initialization
@@ -48,7 +49,7 @@ void init(int timecount)
 
 int main(void)
 {
-	init(0);
+	init();
     while(1)
 	{
 		if (adc_flag == 1)
@@ -61,10 +62,10 @@ int main(void)
 
 ISR(TIMER0_OVF_vect)
 {
-	TCNT0 = 61;		//TCNT0 needs to be set to the start point each time
+	TCNT0 = tcnt0_start;		// set to 
 	++timecount0;	// count the number of times the interrupt has been reached
 	
-	if (timecount0 >= time_delay)	// 40 * 12.5ms = 500ms
+	if (timecount0 >= time_delay)	
 	{
 		PORTD = ~PORTD;		// Toggle all the bits
 		timecount0 = 0;		// Restart the overflow counter
@@ -83,9 +84,13 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
 	
 	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) && (adc_reading > 0)) // check adc voltage is between 0V-2.5V
 	{
-		time_delay = 40; // set time delay
+		// 1s delay
+		tcnt0_start = 125; // set start of timer count
+		time_delay = 125; // set number of overflows
 	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
 	{
-		time_delay = 20; // set time delay
+		// 0.5s delay
+		tcnt0_start = 142; // set start of timer count
+		time_delay = 55; // set number of overflows
 	}
 }

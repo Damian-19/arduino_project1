@@ -3,31 +3,31 @@ Project1.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000002  00800100  000001ce  00000262  2**0
+  0 .data         00000002  00800100  000001e2  00000276  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000001ce  00000000  00000000  00000094  2**1
+  1 .text         000001e2  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000006  00800102  00800102  00000264  2**0
+  2 .bss          00000008  00800102  00800102  00000278  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000264  2**0
+  3 .comment      00000030  00000000  00000000  00000278  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000294  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000002a8  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000038  00000000  00000000  000002d4  2**0
+  5 .debug_aranges 00000038  00000000  00000000  000002e8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000073e  00000000  00000000  0000030c  2**0
+  6 .debug_info   00000731  00000000  00000000  00000320  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000663  00000000  00000000  00000a4a  2**0
+  7 .debug_abbrev 00000646  00000000  00000000  00000a51  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000002b9  00000000  00000000  000010ad  2**0
+  8 .debug_line   000002c5  00000000  00000000  00001097  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000098  00000000  00000000  00001368  2**2
+  9 .debug_frame  00000098  00000000  00000000  0000135c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003a4  00000000  00000000  00001400  2**0
+ 10 .debug_str    000003a6  00000000  00000000  000013f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000108  00000000  00000000  000017a4  2**0
+ 11 .debug_loc    000000d3  00000000  00000000  0000179a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000028  00000000  00000000  000018ac  2**0
+ 12 .debug_ranges 00000028  00000000  00000000  0000186d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -49,7 +49,7 @@ Disassembly of section .text:
   34:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   38:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   3c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
-  40:	0c 94 7f 00 	jmp	0xfe	; 0xfe <__vector_16>
+  40:	0c 94 7e 00 	jmp	0xfc	; 0xfc <__vector_16>
   44:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   48:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   4c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
@@ -72,7 +72,7 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	ee ec       	ldi	r30, 0xCE	; 206
+  7a:	e2 ee       	ldi	r30, 0xE2	; 226
   7c:	f1 e0       	ldi	r31, 0x01	; 1
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
@@ -91,11 +91,11 @@ Disassembly of section .text:
   92:	1d 92       	st	X+, r1
 
 00000094 <.do_clear_bss_start>:
-  94:	a8 30       	cpi	r26, 0x08	; 8
+  94:	aa 30       	cpi	r26, 0x0A	; 10
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
-  9a:	0e 94 6e 00 	call	0xdc	; 0xdc <main>
-  9e:	0c 94 e5 00 	jmp	0x1ca	; 0x1ca <_exit>
+  9a:	0e 94 6f 00 	call	0xde	; 0xde <main>
+  9e:	0c 94 ef 00 	jmp	0x1de	; 0x1de <_exit>
 
 000000a2 <__bad_interrupt>:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -103,12 +103,12 @@ Disassembly of section .text:
 000000a6 <init>:
 uint16_t adc_reading;
 
-void init(int timecount)
+void init(void)
 {
 	//Set PortD to all outputs because LEDs are connected to this PORT
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
-  a6:	2f ef       	ldi	r18, 0xFF	; 255
-  a8:	2a b9       	out	0x0a, r18	; 10
+  a6:	8f ef       	ldi	r24, 0xFF	; 255
+  a8:	8a b9       	out	0x0a, r24	; 10
 	PORTD = 0;		// Initialise to all off
   aa:	1b b8       	out	0x0b, r1	; 11
 	DDRB = 0b00000000;
@@ -116,9 +116,9 @@ void init(int timecount)
 	PORTB = 0;
   ae:	15 b8       	out	0x05, r1	; 5
 	
-	timecount0 = timecount;
-  b0:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <timecount0+0x1>
-  b4:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <timecount0>
+	timecount0 = 0;
+  b0:	10 92 09 01 	sts	0x0109, r1	; 0x800109 <timecount0+0x1>
+  b4:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <timecount0>
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
   b8:	85 e0       	ldi	r24, 0x05	; 5
   ba:	85 bd       	out	0x25, r24	; 37
@@ -126,96 +126,94 @@ void init(int timecount)
 	TCCR0A = 0;			// Not strictly necessary as these are the reset states but it's good
   bc:	14 bc       	out	0x24, r1	; 36
 	// practice to show what you're doing
-	TCNT0 = 61;			// Recall: 256-61 = 195 & 195*64us = 12.48ms, approx 12.5ms
-  be:	8d e3       	ldi	r24, 0x3D	; 61
-  c0:	86 bd       	out	0x26, r24	; 38
+	TCNT0 = tcnt0_start;			// Recall: 256-61 = 195 & 195*64us = 12.48ms, approx 12.5ms
+  be:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__data_start>
+  c2:	86 bd       	out	0x26, r24	; 38
 	TIMSK0 = (1<<TOIE0);	// Enable Timer 0 interrupt
-  c2:	81 e0       	ldi	r24, 0x01	; 1
-  c4:	80 93 6e 00 	sts	0x006E, r24	; 0x80006e <__DATA_REGION_ORIGIN__+0xe>
+  c4:	81 e0       	ldi	r24, 0x01	; 1
+  c6:	80 93 6e 00 	sts	0x006E, r24	; 0x80006e <__DATA_REGION_ORIGIN__+0xe>
 	
 	// ADC initialization
 	ADMUX = ((1<<REFS0) | (0 << ADLAR) | (0<<MUX0));  /* AVCC selected for VREF, ADC0 as ADC input  */
-  c8:	80 e4       	ldi	r24, 0x40	; 64
-  ca:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__DATA_REGION_ORIGIN__+0x1c>
+  ca:	80 e4       	ldi	r24, 0x40	; 64
+  cc:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__DATA_REGION_ORIGIN__+0x1c>
 	ADCSRA = ((1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(6<<ADPS0));
-  ce:	8e ee       	ldi	r24, 0xEE	; 238
-  d0:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
+  d0:	8e ee       	ldi	r24, 0xEE	; 238
+  d2:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
 										/* Enable ADC, Start Conversion, Auto Trigger enabled, 
 										   Interrupt enabled, Prescale = 64  */
 	ADCSRB = (0<<ADTS0); /* Select AutoTrigger Source to Free Running Mode 
-  d4:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <__DATA_REGION_ORIGIN__+0x1b>
+  d6:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <__DATA_REGION_ORIGIN__+0x1b>
 						    Strictly speaking - this is already 0, so we could omit the write to
 						    ADCSRB, but this is included here so the intent is clear */
 	
 	sei();				// Global interrupt enable (I=1)
-  d8:	78 94       	sei
-  da:	08 95       	ret
+  da:	78 94       	sei
+  dc:	08 95       	ret
 
-000000dc <main>:
+000000de <main>:
 }
 
 int main(void)
 {
-	init(0);
-  dc:	80 e0       	ldi	r24, 0x00	; 0
-  de:	90 e0       	ldi	r25, 0x00	; 0
-  e0:	0e 94 53 00 	call	0xa6	; 0xa6 <init>
+	init();
+  de:	0e 94 53 00 	call	0xa6	; 0xa6 <init>
     while(1)
 	{
 		if (adc_flag == 1)
-  e4:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__data_end>
-  e8:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <__data_end+0x1>
-  ec:	81 30       	cpi	r24, 0x01	; 1
-  ee:	91 05       	cpc	r25, r1
-  f0:	e9 f7       	brne	.-6      	; 0xec <main+0x10>
+  e2:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__data_end>
+  e6:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <__data_end+0x1>
+  ea:	81 30       	cpi	r24, 0x01	; 1
+  ec:	91 05       	cpc	r25, r1
+  ee:	e9 f7       	brne	.-6      	; 0xea <main+0xc>
 		{
 			PORTD = PORTD | (1<<PORTD7);
-  f2:	5f 9a       	sbi	0x0b, 7	; 11
+  f0:	5f 9a       	sbi	0x0b, 7	; 11
 			adc_flag = 0;
-  f4:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <__data_end+0x1>
-  f8:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <__data_end>
-  fc:	f3 cf       	rjmp	.-26     	; 0xe4 <main+0x8>
+  f2:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <__data_end+0x1>
+  f6:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <__data_end>
+  fa:	f3 cf       	rjmp	.-26     	; 0xe2 <main+0x4>
 
-000000fe <__vector_16>:
+000000fc <__vector_16>:
 		}
 	}
 }
 
 ISR(TIMER0_OVF_vect)
 {
-  fe:	1f 92       	push	r1
- 100:	0f 92       	push	r0
- 102:	0f b6       	in	r0, 0x3f	; 63
- 104:	0f 92       	push	r0
- 106:	11 24       	eor	r1, r1
- 108:	2f 93       	push	r18
- 10a:	3f 93       	push	r19
- 10c:	8f 93       	push	r24
- 10e:	9f 93       	push	r25
-	TCNT0 = 61;		//TCNT0 needs to be set to the start point each time
- 110:	8d e3       	ldi	r24, 0x3D	; 61
+  fc:	1f 92       	push	r1
+  fe:	0f 92       	push	r0
+ 100:	0f b6       	in	r0, 0x3f	; 63
+ 102:	0f 92       	push	r0
+ 104:	11 24       	eor	r1, r1
+ 106:	2f 93       	push	r18
+ 108:	3f 93       	push	r19
+ 10a:	8f 93       	push	r24
+ 10c:	9f 93       	push	r25
+	TCNT0 = tcnt0_start;		// set to 
+ 10e:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__data_start>
  112:	86 bd       	out	0x26, r24	; 38
 	++timecount0;	// count the number of times the interrupt has been reached
- 114:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <timecount0>
- 118:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <timecount0+0x1>
+ 114:	80 91 08 01 	lds	r24, 0x0108	; 0x800108 <timecount0>
+ 118:	90 91 09 01 	lds	r25, 0x0109	; 0x800109 <timecount0+0x1>
  11c:	01 96       	adiw	r24, 0x01	; 1
- 11e:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <timecount0+0x1>
- 122:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <timecount0>
+ 11e:	90 93 09 01 	sts	0x0109, r25	; 0x800109 <timecount0+0x1>
+ 122:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <timecount0>
 	
-	if (timecount0 >= time_delay)	// 40 * 12.5ms = 500ms
- 126:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__data_start>
- 12a:	30 91 01 01 	lds	r19, 0x0101	; 0x800101 <__data_start+0x1>
+	if (timecount0 >= time_delay)	
+ 126:	20 91 04 01 	lds	r18, 0x0104	; 0x800104 <time_delay>
+ 12a:	30 91 05 01 	lds	r19, 0x0105	; 0x800105 <time_delay+0x1>
  12e:	82 17       	cp	r24, r18
  130:	93 07       	cpc	r25, r19
- 132:	38 f0       	brcs	.+14     	; 0x142 <__vector_16+0x44>
+ 132:	38 f0       	brcs	.+14     	; 0x142 <__vector_16+0x46>
 	{
 		PORTD = ~PORTD;		// Toggle all the bits
  134:	8b b1       	in	r24, 0x0b	; 11
  136:	80 95       	com	r24
  138:	8b b9       	out	0x0b, r24	; 11
 		timecount0 = 0;		// Restart the overflow counter
- 13a:	10 92 07 01 	sts	0x0107, r1	; 0x800107 <timecount0+0x1>
- 13e:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <timecount0>
+ 13a:	10 92 09 01 	sts	0x0109, r1	; 0x800109 <timecount0+0x1>
+ 13e:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <timecount0>
 	}
 }
  142:	9f 91       	pop	r25
@@ -246,12 +244,12 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
 	adc_reading = ADC;   /* ADC is in Free Running Mode - you don't have to set up anything for 
  168:	80 91 78 00 	lds	r24, 0x0078	; 0x800078 <__DATA_REGION_ORIGIN__+0x18>
  16c:	90 91 79 00 	lds	r25, 0x0079	; 0x800079 <__DATA_REGION_ORIGIN__+0x19>
- 170:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <adc_reading+0x1>
- 174:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <adc_reading>
+ 170:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <adc_reading+0x1>
+ 174:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <adc_reading>
 						    the next conversion */
 	if (adc_reading != 0) // check if new adc reading available
  178:	00 97       	sbiw	r24, 0x00	; 0
- 17a:	e9 f0       	breq	.+58     	; 0x1b6 <__vector_21+0x62>
+ 17a:	39 f1       	breq	.+78     	; 0x1ca <__vector_21+0x76>
 	{
 		adc_flag = 1; // set flag
  17c:	21 e0       	ldi	r18, 0x01	; 1
@@ -266,39 +264,49 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
  18c:	31 09       	sbc	r19, r1
  18e:	2e 3f       	cpi	r18, 0xFE	; 254
  190:	31 40       	sbci	r19, 0x01	; 1
- 192:	38 f4       	brcc	.+14     	; 0x1a2 <__vector_21+0x4e>
+ 192:	58 f4       	brcc	.+22     	; 0x1aa <__vector_21+0x56>
 	{
-		time_delay = 40; // set time delay
- 194:	88 e2       	ldi	r24, 0x28	; 40
+		// 1s delay
+		tcnt0_start = 125; // set start of timer count
+ 194:	8d e7       	ldi	r24, 0x7D	; 125
  196:	90 e0       	ldi	r25, 0x00	; 0
  198:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__data_start+0x1>
  19c:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__data_start>
- 1a0:	0a c0       	rjmp	.+20     	; 0x1b6 <__vector_21+0x62>
+		time_delay = 125; // set number of overflows
+ 1a0:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <time_delay+0x1>
+ 1a4:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <time_delay>
+ 1a8:	10 c0       	rjmp	.+32     	; 0x1ca <__vector_21+0x76>
 	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
- 1a2:	92 50       	subi	r25, 0x02	; 2
- 1a4:	8f 3f       	cpi	r24, 0xFF	; 255
- 1a6:	91 40       	sbci	r25, 0x01	; 1
- 1a8:	30 f4       	brcc	.+12     	; 0x1b6 <__vector_21+0x62>
+ 1aa:	92 50       	subi	r25, 0x02	; 2
+ 1ac:	8f 3f       	cpi	r24, 0xFF	; 255
+ 1ae:	91 40       	sbci	r25, 0x01	; 1
+ 1b0:	60 f4       	brcc	.+24     	; 0x1ca <__vector_21+0x76>
 	{
-		time_delay = 20; // set time delay
- 1aa:	84 e1       	ldi	r24, 0x14	; 20
- 1ac:	90 e0       	ldi	r25, 0x00	; 0
- 1ae:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__data_start+0x1>
- 1b2:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__data_start>
+		// 0.5s delay
+		tcnt0_start = 142; // set start of timer count
+ 1b2:	8e e8       	ldi	r24, 0x8E	; 142
+ 1b4:	90 e0       	ldi	r25, 0x00	; 0
+ 1b6:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__data_start+0x1>
+ 1ba:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__data_start>
+		time_delay = 55; // set number of overflows
+ 1be:	87 e3       	ldi	r24, 0x37	; 55
+ 1c0:	90 e0       	ldi	r25, 0x00	; 0
+ 1c2:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <time_delay+0x1>
+ 1c6:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <time_delay>
 	}
- 1b6:	9f 91       	pop	r25
- 1b8:	8f 91       	pop	r24
- 1ba:	4f 91       	pop	r20
- 1bc:	3f 91       	pop	r19
- 1be:	2f 91       	pop	r18
- 1c0:	0f 90       	pop	r0
- 1c2:	0f be       	out	0x3f, r0	; 63
- 1c4:	0f 90       	pop	r0
- 1c6:	1f 90       	pop	r1
- 1c8:	18 95       	reti
+ 1ca:	9f 91       	pop	r25
+ 1cc:	8f 91       	pop	r24
+ 1ce:	4f 91       	pop	r20
+ 1d0:	3f 91       	pop	r19
+ 1d2:	2f 91       	pop	r18
+ 1d4:	0f 90       	pop	r0
+ 1d6:	0f be       	out	0x3f, r0	; 63
+ 1d8:	0f 90       	pop	r0
+ 1da:	1f 90       	pop	r1
+ 1dc:	18 95       	reti
 
-000001ca <_exit>:
- 1ca:	f8 94       	cli
+000001de <_exit>:
+ 1de:	f8 94       	cli
 
-000001cc <__stop_program>:
- 1cc:	ff cf       	rjmp	.-2      	; 0x1cc <__stop_program>
+000001e0 <__stop_program>:
+ 1e0:	ff cf       	rjmp	.-2      	; 0x1e0 <__stop_program>
