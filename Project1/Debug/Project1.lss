@@ -260,7 +260,7 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
  184:	20 93 02 01 	sts	0x0102, r18	; 0x800102 <__data_end>
 	}
 	
-	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) & (adc_reading > 0)) // check adc voltage is between 0V-2.5V
+	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) && (adc_reading > 0)) // check adc voltage is between 0V-2.5V
  188:	9c 01       	movw	r18, r24
  18a:	21 50       	subi	r18, 0x01	; 1
  18c:	31 09       	sbc	r19, r1
@@ -274,7 +274,7 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
  198:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__data_start+0x1>
  19c:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__data_start>
  1a0:	0a c0       	rjmp	.+20     	; 0x1b6 <__vector_21+0x62>
-	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) & (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
+	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
  1a2:	92 50       	subi	r25, 0x02	; 2
  1a4:	8f 3f       	cpi	r24, 0xFF	; 255
  1a6:	91 40       	sbci	r25, 0x01	; 1

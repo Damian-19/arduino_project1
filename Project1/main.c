@@ -81,10 +81,10 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
 		adc_flag = 1; // set flag
 	}
 	
-	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) & (adc_reading > 0)) // check adc voltage is between 0V-2.5V
+	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) && (adc_reading > 0)) // check adc voltage is between 0V-2.5V
 	{
 		time_delay = 40; // set time delay
-	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) & (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
+	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
 	{
 		time_delay = 20; // set time delay
 	}
