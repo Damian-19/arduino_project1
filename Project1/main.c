@@ -9,7 +9,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define THRESHOLD_VOLTAGE 600
+#define LOWER_THRESHOLD_VOLTAGE 511
+#define UPPER_THRESHOLD_VOLTAGE 1023
 #define TEST_PIN REGISTER_BIT(PORTD, 1) // testing
 
 unsigned int timecount0;
@@ -77,10 +78,11 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
 	{
 		adc_flag = 1;
 	}
-	if (adc_reading > THRESHOLD_VOLTAGE)
+	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) & (adc_reading > 0))
 	{
-		time_delay = 10;
-	} else {
 		time_delay = 40;
+	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) & (adc_reading > LOWER_THRESHOLD_VOLTAGE))
+	{
+		time_delay = 20;
 	}
 }
