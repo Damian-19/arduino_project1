@@ -19,8 +19,8 @@ int tcnt0_start = 125;
 uint16_t adc_flag = 0;
 uint16_t adc_reading;
 
-unsigned char direction = 1; // 1 indicates up, 0 indicates down, initialize to 1
-unsigned char active_led = 0; // sets the current led on
+unsigned int direction = 1; // 1 indicates up, 0 indicates down, initialize to 1
+unsigned int active_led = 0; // sets the current led on
 
 /***************************
 *initialization function 
@@ -29,9 +29,9 @@ void init(void)
 {
 	//Set PortD to all outputs because LEDs are connected to this PORT
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
-	PORTD = 0;		// Initialise to all off
-	DDRB = 0b00000000;
-	PORTB = 0;
+	PORTD = 0;		// disable all pull up resistors
+	DDRB = 0b00000000; // set PORTB to inputs
+	PORTB = 0b11001111; // enable pull up resistors on pins 4 & 5
 	
 	timecount0 = 0;
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
@@ -56,22 +56,22 @@ void init(void)
 /*********************************
 *looping cylon pattern function
 *********************************/
-void cylon_loop(void)
+void cylon_loop(int bits)
 {
 	// cylon pattern
 	if (direction == 1) { // check if direction is up
 		active_led++; // increment the active led
-		if (active_led >= 7) { // check if led has reached end (pin 7)
+		if (active_led >= bits) { // check if led has reached end (pin 7)
 			direction = 0; // set direction to down
 		}
 		PORTD = 0b00000001 << active_led; // set pin of portd to current led
 		} else if (direction == 0) { // check if direction is down
-		active_led--; // decrement the active led
-		if (active_led == 0) { // check if led has reached the start (pin 0)
-			direction = 1; // set direction to up
+			active_led--; // decrement the active led
+			if (active_led == 0) { // check if led has reached the start (pin 0)
+				direction = 1; // set direction to up
+			}
+			PORTD = 0b00000001 << active_led; // set pin of portd to current led
 		}
-		PORTD = 0b00000001 << active_led; // set pin of portd to current led
-	}
 }
 
 int main(void)
@@ -89,12 +89,12 @@ int main(void)
 
 ISR(TIMER0_OVF_vect)
 {
-	TCNT0 = tcnt0_start;		// set to 
+	TCNT0 = tcnt0_start;		// set to start value based on 1s or 0.5s 
 	++timecount0;	// count the number of times the interrupt has been reached
 	
 	if (timecount0 >= time_delay)	// check if amount of overflows equals adc setting
 	{
-		cylon_loop();
+		cylon_loop(7);
 		timecount0 = 0;		// Restart the overflow counter
 	}
 }
@@ -112,12 +112,13 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
 	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) && (adc_reading > 0)) // check adc voltage is between 0V-2.5V
 	{
 		// 1s delay
-		tcnt0_start = 125; // set start of timer count
-		time_delay = 125; // set number of overflows
+		tcnt0_start = 125; // for 1s delay we start the timer count at 125
+		time_delay = 125; // for 1s delay we want 125 overflows to trigger an interrupt
+		
 	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
 	{
 		// 0.5s delay
-		tcnt0_start = 142; // set start of timer count
-		time_delay = 55; // set number of overflows
+		tcnt0_start = 142; // for 0.5s delay we start the timer count at 142
+		time_delay = 55; // for 0.5s delay we want 55 overflows to trigger an interrupt
 	}
 }
