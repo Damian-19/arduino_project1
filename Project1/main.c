@@ -10,18 +10,25 @@
 #include <avr/interrupt.h>
 
 #define LOWER_THRESHOLD_VOLTAGE 511
+#define ONE_EIGHT_VOLTAGE 128
+#define ONE_QUARTER_VOLTAGE 256
+#define THREE_EIGHT_VOLTAGE 384
+#define HALF_VOLTAGE 512
+#define FIVE_EIGHT_VOLTAGE 639
+#define THREE_QUARTER_VOLTAGE 767
+#define SEVEN_EIGHT_VOLTAGE 895
 #define UPPER_THRESHOLD_VOLTAGE 1023
-#define TEST_PIN REGISTER_BIT(PORTD, 1) // testing
 
-unsigned int timecount0;
-int time_delay = 0;
-int tcnt0_start = 125;
-int adc_flag = 0;
-int display_flag = 1;
-uint16_t adc_reading;
+// declare all global variables as volatile to avoid compiler optimization
+volatile unsigned int timecount0; // number of overflows
+volatile int time_delay; // number of overflows needed
+volatile int tcnt0_start; // counter start variable
+volatile int adc_flag; // new adc result flag
+volatile int display_flag; // check if portb bit 4 is pressed
+volatile uint16_t adc_reading; // variable to hold adc reading
 
-unsigned int direction = 0; // 1 indicates up, 0 indicates down, initialize to 0
-unsigned int active_led = 7; // sets the current led on
+volatile unsigned int direction; // direction of cylon eyes travel
+volatile unsigned int active_led; // current active led in cylon pattern
 
 /***************************
 *initialization function 
@@ -34,7 +41,15 @@ void init(void)
 	DDRB = 0b00000000; // set PORTB to inputs
 	PORTB = 0b00110000; // enable pull up resistors on pins 4 & 5
 	
+	// initialize global variables
 	timecount0 = 0;
+	adc_flag = 0;
+	display_flag = 1;
+	tcnt0_start = 125;
+	time_delay = 0;
+	direction = 0; // start cylon eyes heading down (7-0)
+	active_led = 7; // start cylon eyes at bit 7
+	
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
 	
 	TCCR0A = 0;			// Not strictly necessary as these are the reset states but it's good
@@ -80,49 +95,49 @@ void adc_display(int display_flag)
 {
 	if (display_flag == 1)
 	{
-		if ((adc_reading >= 0) && (adc_reading <= 128))
+		if ((adc_reading >= 0) && (adc_reading <= ONE_EIGHT_VOLTAGE))
 		{
 			PORTD = 0b00000000;
-		} else if ((adc_reading >= 128) && (adc_reading <= 256))
+		} else if ((adc_reading >= ONE_EIGHT_VOLTAGE) && (adc_reading <= ONE_QUARTER_VOLTAGE))
 		{
 			PORTD = 0b00000001;
-		} else if ((adc_reading >= 256) && (adc_reading <= 384))
+		} else if ((adc_reading >= ONE_QUARTER_VOLTAGE) && (adc_reading <= THREE_EIGHT_VOLTAGE))
 		{
 			PORTD = 0b00000011;
-		} else if ((adc_reading >= 384) && (adc_reading <= 512))
+		} else if ((adc_reading >= THREE_EIGHT_VOLTAGE) && (adc_reading <= HALF_VOLTAGE))
 		{
 			PORTD = 0b00000111;
-		} else if ((adc_reading >= 512) && (adc_reading <= 639))
+		} else if ((adc_reading >= HALF_VOLTAGE) && (adc_reading <= FIVE_EIGHT_VOLTAGE))
 		{
 			PORTD = 0b00001111;
-		} else if ((adc_reading >= 639) && (adc_reading <= 767))
+		} else if ((adc_reading >= FIVE_EIGHT_VOLTAGE) && (adc_reading <= THREE_QUARTER_VOLTAGE))
 		{
 			PORTD = 0b00011111;
-		} else if ((adc_reading >= 767) && (adc_reading <= 895))
+		} else if ((adc_reading >= THREE_QUARTER_VOLTAGE) && (adc_reading <= SEVEN_EIGHT_VOLTAGE))
 		{
 			PORTD = 0b00111111;
-		} else if ((adc_reading >= 895) && (adc_reading < 1023))
+		} else if ((adc_reading >= SEVEN_EIGHT_VOLTAGE) && (adc_reading < UPPER_THRESHOLD_VOLTAGE))
 		{
 			PORTD = 0b01111111;
-		} else if (adc_reading == 1023)
+		} else if (adc_reading == UPPER_THRESHOLD_VOLTAGE)
 		{
 			PORTD = 0b11111111;
 		}
 	} else if (display_flag == 0)
 	{
-		if ((adc_reading >= 0) && (adc_reading <= 256))
+		if ((adc_reading >= 0) && (adc_reading <= ONE_QUARTER_VOLTAGE))
 		{
 			PORTD |= 0b00000000;
-		} else if ((adc_reading >= 256) && (adc_reading <= 512))
+		} else if ((adc_reading >= ONE_QUARTER_VOLTAGE) && (adc_reading <= HALF_VOLTAGE))
 		{
 			PORTD |= 0b00000001;
-		} else if ((adc_reading >= 512) && (adc_reading <= 767))
+		} else if ((adc_reading >= HALF_VOLTAGE) && (adc_reading <= THREE_QUARTER_VOLTAGE))
 		{
 			PORTD |= 0b00000011;
-		} else if ((adc_reading >= 767) && (adc_reading < 1023))
+		} else if ((adc_reading >= THREE_QUARTER_VOLTAGE) && (adc_reading < UPPER_THRESHOLD_VOLTAGE))
 		{
 			PORTD |= 0b00000111;
-		} else if (adc_reading == 1023)
+		} else if (adc_reading == UPPER_THRESHOLD_VOLTAGE)
 		{
 			PORTD |= 0b00001111;
 		}
@@ -134,17 +149,20 @@ int main(void)
 	init();
     while(1)
 	{
-		if ((PINB & 0b00100000) == 0b00100000)
+		if (adc_flag)
 		{
-			if ((PINB & 0b00010000) == 0b00000000)
+			if ((PINB & 0b00100000) == 0b00100000)
 			{
-				display_flag = 1;
+				if ((PINB & 0b00010000) == 0b00000000)
+				{
+					display_flag = 1;
+					adc_display(display_flag);
+				}
+			} else if ((PINB & 0b00100000) == 0b00000000)
+			{
+				display_flag = 0;
 				adc_display(display_flag);
 			}
-		} else if ((PINB & 0b00100000) == 0b00000000)
-		{
-			display_flag = 0;
-			adc_display(display_flag);
 		}
 	}
 }
