@@ -3,31 +3,31 @@ Project1.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  0000058c  2**0
+  0 .data         00000000  00800100  00800100  00000588  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000518  00000000  00000000  00000074  2**1
+  1 .text         00000514  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000010  00800100  00800100  0000058c  2**0
+  2 .bss          00000010  00800100  00800100  00000588  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000058c  2**0
+  3 .comment      00000030  00000000  00000000  00000588  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000005bc  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000005b8  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000048  00000000  00000000  000005fc  2**0
+  5 .debug_aranges 00000048  00000000  00000000  000005f8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000080d  00000000  00000000  00000644  2**0
+  6 .debug_info   0000080d  00000000  00000000  00000640  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000006c3  00000000  00000000  00000e51  2**0
+  7 .debug_abbrev 000006c3  00000000  00000000  00000e4d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000004cf  00000000  00000000  00001514  2**0
+  8 .debug_line   000004c9  00000000  00000000  00001510  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000d8  00000000  00000000  000019e4  2**2
+  9 .debug_frame  000000d8  00000000  00000000  000019dc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003df  00000000  00000000  00001abc  2**0
+ 10 .debug_str    000003df  00000000  00000000  00001ab4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000001a9  00000000  00000000  00001e9b  2**0
+ 11 .debug_loc    000001a9  00000000  00000000  00001e93  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000038  00000000  00000000  00002044  2**0
+ 12 .debug_ranges 00000038  00000000  00000000  0000203c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -54,7 +54,7 @@ Disassembly of section .text:
   48:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   4c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   50:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  54:	0c 94 32 02 	jmp	0x464	; 0x464 <__vector_21>
+  54:	0c 94 30 02 	jmp	0x460	; 0x460 <__vector_21>
   58:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   5c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   60:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
@@ -82,7 +82,7 @@ Disassembly of section .text:
   80:	b2 07       	cpc	r27, r18
   82:	e1 f7       	brne	.-8      	; 0x7c <.do_clear_bss_loop>
   84:	0e 94 ba 01 	call	0x374	; 0x374 <main>
-  88:	0c 94 8a 02 	jmp	0x514	; 0x514 <_exit>
+  88:	0c 94 88 02 	jmp	0x510	; 0x510 <_exit>
 
 0000008c <__bad_interrupt>:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -167,8 +167,8 @@ void init(void)
  108:	08 95       	ret
 
 0000010a <cylon_loop>:
-*looping cylon pattern function
-*********************************/
+*		should end (0, meaning full display; 4, meaning half display)
+**************************************************************************/
 void cylon_loop(int end)
 {
 	// cylon pattern
@@ -243,9 +243,9 @@ void cylon_loop(int end)
  1a8:	08 95       	ret
 
 000001aa <adc_display>:
-		}
-}
-
+* display_flag: checks if display should be in 
+*				full 8-bit, or half 4-bit mode 
+***********************************************/
 void adc_display(int display_flag)
 {
 	if (display_flag == 1)
@@ -572,7 +572,7 @@ ISR(TIMER0_OVF_vect)
  40a:	90 91 0b 01 	lds	r25, 0x010B	; 0x80010b <time_delay+0x1>
  40e:	28 17       	cp	r18, r24
  410:	39 07       	cpc	r19, r25
- 412:	b8 f0       	brcs	.+46     	; 0x442 <__LOCK_REGION_LENGTH__+0x42>
+ 412:	a8 f0       	brcs	.+42     	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
 	{
 		if ((PINB & 0b00100000) == 0b00100000)
  414:	1d 9b       	sbis	0x03, 5	; 3
@@ -580,140 +580,137 @@ ISR(TIMER0_OVF_vect)
 		{
 			if ((PINB & 0b00010000) == 0b00010000)
  418:	1c 9b       	sbis	0x03, 4	; 3
- 41a:	13 c0       	rjmp	.+38     	; 0x442 <__LOCK_REGION_LENGTH__+0x42>
+ 41a:	11 c0       	rjmp	.+34     	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
 			{
-				cylon_loop(0);
+				cylon_loop(0); // start 8-bit cylon pattern
  41c:	80 e0       	ldi	r24, 0x00	; 0
  41e:	90 e0       	ldi	r25, 0x00	; 0
  420:	0e 94 85 00 	call	0x10a	; 0x10a <cylon_loop>
 				timecount0 = 0;		// Restart the overflow counter
  424:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <timecount0+0x1>
  428:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <timecount0>
- 42c:	0a c0       	rjmp	.+20     	; 0x442 <__LOCK_REGION_LENGTH__+0x42>
+ 42c:	08 c0       	rjmp	.+16     	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
 			}
 		} else {
-			cylon_loop(4);
+			cylon_loop(4); // start 4-bit cylon pattern
  42e:	84 e0       	ldi	r24, 0x04	; 4
  430:	90 e0       	ldi	r25, 0x00	; 0
  432:	0e 94 85 00 	call	0x10a	; 0x10a <cylon_loop>
 			timecount0 = 0;
  436:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <timecount0+0x1>
  43a:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <timecount0>
-			PORTD |= 0b00000000;
- 43e:	8b b1       	in	r24, 0x0b	; 11
- 440:	8b b9       	out	0x0b, r24	; 11
 		}
 	}
 }
- 442:	ff 91       	pop	r31
- 444:	ef 91       	pop	r30
- 446:	bf 91       	pop	r27
- 448:	af 91       	pop	r26
- 44a:	9f 91       	pop	r25
- 44c:	8f 91       	pop	r24
- 44e:	7f 91       	pop	r23
- 450:	6f 91       	pop	r22
- 452:	5f 91       	pop	r21
- 454:	4f 91       	pop	r20
- 456:	3f 91       	pop	r19
- 458:	2f 91       	pop	r18
+ 43e:	ff 91       	pop	r31
+ 440:	ef 91       	pop	r30
+ 442:	bf 91       	pop	r27
+ 444:	af 91       	pop	r26
+ 446:	9f 91       	pop	r25
+ 448:	8f 91       	pop	r24
+ 44a:	7f 91       	pop	r23
+ 44c:	6f 91       	pop	r22
+ 44e:	5f 91       	pop	r21
+ 450:	4f 91       	pop	r20
+ 452:	3f 91       	pop	r19
+ 454:	2f 91       	pop	r18
+ 456:	0f 90       	pop	r0
+ 458:	0f be       	out	0x3f, r0	; 63
  45a:	0f 90       	pop	r0
- 45c:	0f be       	out	0x3f, r0	; 63
- 45e:	0f 90       	pop	r0
- 460:	1f 90       	pop	r1
- 462:	18 95       	reti
+ 45c:	1f 90       	pop	r1
+ 45e:	18 95       	reti
 
-00000464 <__vector_21>:
+00000460 <__vector_21>:
 
 ISR (ADC_vect)	/* handles ADC interrupts  */
 {
- 464:	1f 92       	push	r1
+ 460:	1f 92       	push	r1
+ 462:	0f 92       	push	r0
+ 464:	0f b6       	in	r0, 0x3f	; 63
  466:	0f 92       	push	r0
- 468:	0f b6       	in	r0, 0x3f	; 63
- 46a:	0f 92       	push	r0
- 46c:	11 24       	eor	r1, r1
- 46e:	2f 93       	push	r18
- 470:	8f 93       	push	r24
- 472:	9f 93       	push	r25
+ 468:	11 24       	eor	r1, r1
+ 46a:	2f 93       	push	r18
+ 46c:	8f 93       	push	r24
+ 46e:	9f 93       	push	r25
 	
 	adc_reading = ADC;   /* ADC is in Free Running Mode - you don't have to set up anything for 
- 474:	80 91 78 00 	lds	r24, 0x0078	; 0x800078 <__DATA_REGION_ORIGIN__+0x18>
- 478:	90 91 79 00 	lds	r25, 0x0079	; 0x800079 <__DATA_REGION_ORIGIN__+0x19>
- 47c:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <_edata+0x1>
- 480:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <_edata>
+ 470:	80 91 78 00 	lds	r24, 0x0078	; 0x800078 <__DATA_REGION_ORIGIN__+0x18>
+ 474:	90 91 79 00 	lds	r25, 0x0079	; 0x800079 <__DATA_REGION_ORIGIN__+0x19>
+ 478:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <_edata+0x1>
+ 47c:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <_edata>
 						    the next conversion */
 	if (adc_reading != 0) // check if new adc reading available
- 484:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 488:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 48c:	89 2b       	or	r24, r25
- 48e:	31 f0       	breq	.+12     	; 0x49c <__vector_21+0x38>
+ 480:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 484:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 488:	89 2b       	or	r24, r25
+ 48a:	31 f0       	breq	.+12     	; 0x498 <__vector_21+0x38>
 	{
 		adc_flag = 1; // set flag
- 490:	81 e0       	ldi	r24, 0x01	; 1
- 492:	90 e0       	ldi	r25, 0x00	; 0
- 494:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <adc_flag+0x1>
- 498:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <adc_flag>
+ 48c:	81 e0       	ldi	r24, 0x01	; 1
+ 48e:	90 e0       	ldi	r25, 0x00	; 0
+ 490:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <adc_flag+0x1>
+ 494:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <adc_flag>
 	}
 	
 	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) && (adc_reading > 0)) // check adc voltage is between 0V-2.5V
- 49c:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 4a0:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4a4:	8f 3f       	cpi	r24, 0xFF	; 255
- 4a6:	91 40       	sbci	r25, 0x01	; 1
- 4a8:	98 f4       	brcc	.+38     	; 0x4d0 <__vector_21+0x6c>
- 4aa:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 4ae:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4b2:	89 2b       	or	r24, r25
- 4b4:	69 f0       	breq	.+26     	; 0x4d0 <__vector_21+0x6c>
+ 498:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 49c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 4a0:	8f 3f       	cpi	r24, 0xFF	; 255
+ 4a2:	91 40       	sbci	r25, 0x01	; 1
+ 4a4:	98 f4       	brcc	.+38     	; 0x4cc <__vector_21+0x6c>
+ 4a6:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 4aa:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 4ae:	89 2b       	or	r24, r25
+ 4b0:	69 f0       	breq	.+26     	; 0x4cc <__vector_21+0x6c>
 	{
 		// 0.125s delay
 		tcnt0_start = 39; // for 0.125s delay we start the timer count at 39
- 4b6:	87 e2       	ldi	r24, 0x27	; 39
- 4b8:	90 e0       	ldi	r25, 0x00	; 0
- 4ba:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
- 4be:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
+ 4b2:	87 e2       	ldi	r24, 0x27	; 39
+ 4b4:	90 e0       	ldi	r25, 0x00	; 0
+ 4b6:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
+ 4ba:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
 		time_delay = 9; // for 0.125s delay we want 9 overflows to trigger an interrupt
- 4c2:	89 e0       	ldi	r24, 0x09	; 9
- 4c4:	90 e0       	ldi	r25, 0x00	; 0
- 4c6:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_delay+0x1>
- 4ca:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_delay>
- 4ce:	1a c0       	rjmp	.+52     	; 0x504 <__vector_21+0xa0>
+ 4be:	89 e0       	ldi	r24, 0x09	; 9
+ 4c0:	90 e0       	ldi	r25, 0x00	; 0
+ 4c2:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_delay+0x1>
+ 4c6:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_delay>
+ 4ca:	1a c0       	rjmp	.+52     	; 0x500 <__vector_21+0xa0>
 		
 	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
- 4d0:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 4d4:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4d8:	8f 3f       	cpi	r24, 0xFF	; 255
- 4da:	93 40       	sbci	r25, 0x03	; 3
- 4dc:	98 f4       	brcc	.+38     	; 0x504 <__vector_21+0xa0>
- 4de:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 4e2:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4e6:	81 15       	cp	r24, r1
- 4e8:	92 40       	sbci	r25, 0x02	; 2
- 4ea:	60 f0       	brcs	.+24     	; 0x504 <__vector_21+0xa0>
+ 4cc:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 4d0:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 4d4:	8f 3f       	cpi	r24, 0xFF	; 255
+ 4d6:	93 40       	sbci	r25, 0x03	; 3
+ 4d8:	98 f4       	brcc	.+38     	; 0x500 <__vector_21+0xa0>
+ 4da:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 4de:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 4e2:	81 15       	cp	r24, r1
+ 4e4:	92 40       	sbci	r25, 0x02	; 2
+ 4e6:	60 f0       	brcs	.+24     	; 0x500 <__vector_21+0xa0>
 	{
 		// 0.5s delay
 		tcnt0_start = 142; // for 0.5s delay we start the timer count at 142
- 4ec:	8e e8       	ldi	r24, 0x8E	; 142
- 4ee:	90 e0       	ldi	r25, 0x00	; 0
- 4f0:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
- 4f4:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
+ 4e8:	8e e8       	ldi	r24, 0x8E	; 142
+ 4ea:	90 e0       	ldi	r25, 0x00	; 0
+ 4ec:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
+ 4f0:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
 		time_delay = 55; // for 0.5s delay we want 55 overflows to trigger an interrupt
- 4f8:	87 e3       	ldi	r24, 0x37	; 55
- 4fa:	90 e0       	ldi	r25, 0x00	; 0
- 4fc:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_delay+0x1>
- 500:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_delay>
+ 4f4:	87 e3       	ldi	r24, 0x37	; 55
+ 4f6:	90 e0       	ldi	r25, 0x00	; 0
+ 4f8:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_delay+0x1>
+ 4fc:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_delay>
 	}
- 504:	9f 91       	pop	r25
- 506:	8f 91       	pop	r24
- 508:	2f 91       	pop	r18
+ 500:	9f 91       	pop	r25
+ 502:	8f 91       	pop	r24
+ 504:	2f 91       	pop	r18
+ 506:	0f 90       	pop	r0
+ 508:	0f be       	out	0x3f, r0	; 63
  50a:	0f 90       	pop	r0
- 50c:	0f be       	out	0x3f, r0	; 63
- 50e:	0f 90       	pop	r0
- 510:	1f 90       	pop	r1
- 512:	18 95       	reti
+ 50c:	1f 90       	pop	r1
+ 50e:	18 95       	reti
 
-00000514 <_exit>:
- 514:	f8 94       	cli
+00000510 <_exit>:
+ 510:	f8 94       	cli
 
-00000516 <__stop_program>:
- 516:	ff cf       	rjmp	.-2      	; 0x516 <__stop_program>
+00000512 <__stop_program>:
+ 512:	ff cf       	rjmp	.-2      	; 0x512 <__stop_program>

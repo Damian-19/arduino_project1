@@ -69,9 +69,11 @@ void init(void)
 	sei();				// Global interrupt enable (I=1)
 }
 
-/*********************************
+/**************************************************************************
 *looping cylon pattern function
-*********************************/
+* end: variable to indicate at which led the function
+*		should end (0, meaning full display; 4, meaning half display)
+**************************************************************************/
 void cylon_loop(int end)
 {
 	// cylon pattern
@@ -91,6 +93,12 @@ void cylon_loop(int end)
 		}
 }
 
+
+/***********************************************
+* adc ouput thermometer display
+* display_flag: checks if display should be in 
+*				full 8-bit, or half 4-bit mode 
+***********************************************/
 void adc_display(int display_flag)
 {
 	if (display_flag == 1)
@@ -178,13 +186,12 @@ ISR(TIMER0_OVF_vect)
 		{
 			if ((PINB & 0b00010000) == 0b00010000)
 			{
-				cylon_loop(0);
+				cylon_loop(0); // start 8-bit cylon pattern
 				timecount0 = 0;		// Restart the overflow counter
 			}
 		} else {
-			cylon_loop(4);
+			cylon_loop(4); // start 4-bit cylon pattern
 			timecount0 = 0;
-			PORTD |= 0b00000000;
 		}
 	}
 }
