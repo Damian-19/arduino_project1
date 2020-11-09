@@ -21,7 +21,7 @@
 
 // declare all global variables as volatile to avoid compiler optimization
 volatile unsigned int timecount0; // number of overflows
-volatile int time_delay; // number of overflows needed
+volatile int time_overflow; // number of overflows needed
 volatile int tcnt0_start; // counter start variable
 volatile int adc_flag; // new adc result flag
 volatile int display_flag; // check if portb bit 4 is pressed
@@ -44,36 +44,37 @@ void init(void)
 	// initialize global variables
 	timecount0 = 0;
 	adc_flag = 0;
-	display_flag = 1;
-	tcnt0_start = 125;
-	time_delay = 0;
-	direction = 0; // start cylon eyes heading down (7-0)
+	display_flag = 1; // initialize to 8-bit thermometer display
+	tcnt0_start = 125; // begin timer count at 125
+	time_overflow = 0;
+	direction = 0; // start cylon eyes heading down (7->0)
 	active_led = 7; // start cylon eyes at bit 7
 	
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
 	
 	TCCR0A = 0;			// Not strictly necessary as these are the reset states but it's good
 	// practice to show what you're doing
-	TCNT0 = tcnt0_start;			// Recall: 256-61 = 195 & 195*64us = 12.48ms, approx 12.5ms
+	TCNT0 = tcnt0_start;	// assign timer count start
 	TIMSK0 = (1<<TOIE0);	// Enable Timer 0 interrupt
 	
 	// ADC initialization
-	ADMUX = ((1<<REFS0) | (0 << ADLAR) | (0<<MUX0));  /* AVCC selected for VREF, ADC0 as ADC input  */
-	ADCSRA = ((1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(6<<ADPS0));
-										/* Enable ADC, Start Conversion, Auto Trigger enabled, 
-										   Interrupt enabled, Prescale = 64  */
-	ADCSRB = (0<<ADTS0); /* Select AutoTrigger Source to Free Running Mode 
-						    Strictly speaking - this is already 0, so we could omit the write to
-						    ADCSRB, but this is included here so the intent is clear */
+	ADMUX = ((1<<REFS0) | (0 << ADLAR) | (0<<MUX0));  // AVCC selected for VREF, ADC0 as ADC input
+	ADCSRA = ((1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(6<<ADPS0)); /* Enable ADC, Start Conversion, Auto Trigger enabled, 
+																		Interrupt enabled, Prescale = 64  */
+	ADCSRB = (0<<ADTS0); // Select AutoTrigger Source to Free Running Mode
 	
 	sei();				// Global interrupt enable (I=1)
 }
 
-/**************************************************************************
-*looping cylon pattern function
+/**************************************************************************************************
+* looping cylon pattern function
+* function works by using the direction variable to indicate which way the led's should be moving
+* the pattern starts at bit 7 and works its way down. It knows it has reached the end when the 
+* currently active led = end, which is either bit 0 or bit 4 depending on the display mode
+*
 * end: variable to indicate at which led the function
 *		should end (0, meaning full display; 4, meaning half display)
-**************************************************************************/
+***************************************************************************************************/
 void cylon_loop(int end)
 {
 	// cylon pattern
@@ -90,7 +91,7 @@ void cylon_loop(int end)
 			direction = 0; // set direction to down
 		}
 		PORTD = 0b00000001 << active_led; // set pin of portd to current led
-		}
+	}
 }
 
 
@@ -180,7 +181,7 @@ ISR(TIMER0_OVF_vect)
 	TCNT0 = tcnt0_start;		// set to start value based on 0.125s or 0.5s 
 	++timecount0;	// count the number of times the interrupt has been reached
 	
-	if (timecount0 >= time_delay)	// check if amount of overflows equals adc setting
+	if (timecount0 >= time_overflow)	// check if amount of overflows equals adc setting
 	{
 		if ((PINB & 0b00100000) == 0b00100000)
 		{
@@ -210,12 +211,12 @@ ISR (ADC_vect)	/* handles ADC interrupts  */
 	{
 		// 0.125s delay
 		tcnt0_start = 39; // for 0.125s delay we start the timer count at 39
-		time_delay = 9; // for 0.125s delay we want 9 overflows to trigger an interrupt
+		time_overflow = 9; // for 0.125s delay we want 9 overflows to trigger an interrupt
 		
 	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
 	{
 		// 0.5s delay
 		tcnt0_start = 142; // for 0.5s delay we start the timer count at 142
-		time_delay = 55; // for 0.5s delay we want 55 overflows to trigger an interrupt
+		time_overflow = 55; // for 0.5s delay we want 55 overflows to trigger an interrupt
 	}
 }
