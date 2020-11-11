@@ -186,7 +186,7 @@ int main(void)
 	}
 }
 
-ISR(TIMER0_OVF_vect)
+ISR(TIMER0_OVF_vect) // timer0 ISR
 {
 	TCNT0 = tcnt0_start; // set to start value based on 0.125s or 0.5s 
 	++timecount0; // count the number of times the overflow has been reached
