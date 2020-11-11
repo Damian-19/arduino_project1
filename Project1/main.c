@@ -9,6 +9,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+// adc threshold values
 #define LOWER_THRESHOLD_VOLTAGE 511
 #define ONE_EIGHT_VOLTAGE 128
 #define ONE_QUARTER_VOLTAGE 256
@@ -17,18 +18,18 @@
 #define FIVE_EIGHT_VOLTAGE 639
 #define THREE_QUARTER_VOLTAGE 767
 #define SEVEN_EIGHT_VOLTAGE 895
-#define UPPER_THRESHOLD_VOLTAGE 1023
+#define MAX_THRESHOLD_VOLTAGE 1023
 
 // declare all global variables as volatile to avoid compiler optimization
-volatile unsigned int timecount0; // number of overflows
+volatile unsigned int timecount0; // number of overflows reached
 volatile int time_overflow; // number of overflows needed
-volatile int tcnt0_start; // counter start variable
+volatile int tcnt0_start; // counter start
 volatile int adc_flag; // new adc result flag
 volatile int display_flag; // check if portb bit 4 is pressed
 volatile uint16_t adc_reading; // variable to hold adc reading
 
-volatile unsigned int direction; // direction of cylon eyes travel
-volatile unsigned int active_led; // current active led in cylon pattern
+volatile int direction; // direction of cylon eyes travel
+volatile int active_pin; // current active pin in cylon pattern
 
 /***************************
 *initialization function 
@@ -48,7 +49,7 @@ void init(void)
 	tcnt0_start = 125; // begin timer count at 125
 	time_overflow = 0;
 	direction = 0; // start cylon eyes heading down (7->0)
-	active_led = 7; // start cylon eyes at bit 7
+	active_pin = 7; // start cylon eyes at bit 7
 	
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
 	
@@ -68,109 +69,118 @@ void init(void)
 
 /**************************************************************************************************
 * looping cylon pattern function
-* function works by using the direction variable to indicate which way the led's should be moving
-* the pattern starts at bit 7 and works its way down. It knows it has reached the end when the 
-* currently active led = end, which is either bit 0 or bit 4 depending on the display mode
 *
-* end: variable to indicate at which led the function
-*		should end (0, meaning full display; 4, meaning half display)
+* function works by using the direction variable to indicate which way the led's should be moving.
+* the pattern starts at bit 7 and works its way down. It knows it has reached the end when the 
+* currently active led = end, which is passed into the function from the ISR.
+*
+* int end: variable to indicate at which led the function should end, passed in from the ISR.
+*		  (0, meaning full display; 4, meaning half display)
 ***************************************************************************************************/
 void cylon_loop(int end)
 {
-	// cylon pattern
-	if (direction == 0) { // check if direction is down
-		active_led--; // decrement the active led
-		if (active_led <= end) { // check if led has reached the start (pin 4 or 0)
+	// down
+	if (direction == 0) // check if direction is down
+	{
+		active_pin--; // decrement the active led
+		if (active_pin <= end) // check if led has reached the end (pin 4 or 0)
+		{
 			direction = 1; // set direction to up
 		}
-		PORTD = 0b00000001 << active_led; // set pin of portd to current led
+		PORTD = 0b00000001 << active_pin; // set pin of portd to current led
 		
-		} else if (direction == 1) { // check if direction is up
-		active_led++; // increment the active led
-		if (active_led >= 7) { // check if led has reached end (pin 7)
+		// up
+	} else if (direction == 1) // check if direction is up
+	{
+		active_pin++; // increment the active led
+		if (active_pin >= 7) // check if led has reached end (pin 7)
+		{
 			direction = 0; // set direction to down
 		}
-		PORTD = 0b00000001 << active_led; // set pin of portd to current led
+		PORTD = 0b00000001 << active_pin; // set pin of portd to current led
 	}
 }
 
 
 /***********************************************
-* adc ouput thermometer display
-* display_flag: checks if display should be in 
-*				full 8-bit, or half 4-bit mode 
+* adc thermometer display
+* int display_flag: sets display to full 8-bit, 
+*				or half 4-bit mode 
 ***********************************************/
 void adc_display(int display_flag)
 {
-	if (display_flag == 1)
+	if (display_flag) // full 8-bit display, this takes control of PORTD
 	{
-		if ((adc_reading >= 0) && (adc_reading <= ONE_EIGHT_VOLTAGE))
+		if (adc_reading <= ONE_EIGHT_VOLTAGE)
 		{
 			PORTD = 0b00000000;
-		} else if ((adc_reading >= ONE_EIGHT_VOLTAGE) && (adc_reading <= ONE_QUARTER_VOLTAGE))
+		} else if (adc_reading <= ONE_QUARTER_VOLTAGE)
 		{
 			PORTD = 0b00000001;
-		} else if ((adc_reading >= ONE_QUARTER_VOLTAGE) && (adc_reading <= THREE_EIGHT_VOLTAGE))
+		} else if (adc_reading <= THREE_EIGHT_VOLTAGE)
 		{
 			PORTD = 0b00000011;
-		} else if ((adc_reading >= THREE_EIGHT_VOLTAGE) && (adc_reading <= HALF_VOLTAGE))
+		} else if (adc_reading <= HALF_VOLTAGE)
 		{
 			PORTD = 0b00000111;
-		} else if ((adc_reading >= HALF_VOLTAGE) && (adc_reading <= FIVE_EIGHT_VOLTAGE))
+		} else if (adc_reading <= FIVE_EIGHT_VOLTAGE)
 		{
 			PORTD = 0b00001111;
-		} else if ((adc_reading >= FIVE_EIGHT_VOLTAGE) && (adc_reading <= THREE_QUARTER_VOLTAGE))
+		} else if (adc_reading <= THREE_QUARTER_VOLTAGE)
 		{
 			PORTD = 0b00011111;
-		} else if ((adc_reading >= THREE_QUARTER_VOLTAGE) && (adc_reading <= SEVEN_EIGHT_VOLTAGE))
+		} else if (adc_reading <= SEVEN_EIGHT_VOLTAGE)
 		{
 			PORTD = 0b00111111;
-		} else if ((adc_reading >= SEVEN_EIGHT_VOLTAGE) && (adc_reading < UPPER_THRESHOLD_VOLTAGE))
+		} else if (adc_reading < MAX_THRESHOLD_VOLTAGE)
 		{
 			PORTD = 0b01111111;
-		} else if (adc_reading == UPPER_THRESHOLD_VOLTAGE)
+		} else if (adc_reading == MAX_THRESHOLD_VOLTAGE)
 		{
 			PORTD = 0b11111111;
 		}
-	} else if (display_flag == 0)
+	} else if (!display_flag) // half 4-bit display, this only alters bits 0-3
 	{
-		if ((adc_reading >= 0) && (adc_reading <= ONE_QUARTER_VOLTAGE))
+		if (adc_reading <= ONE_QUARTER_VOLTAGE)
 		{
 			PORTD |= 0b00000000;
-		} else if ((adc_reading >= ONE_QUARTER_VOLTAGE) && (adc_reading <= HALF_VOLTAGE))
+		} else if (adc_reading <= HALF_VOLTAGE)
 		{
 			PORTD |= 0b00000001;
-		} else if ((adc_reading >= HALF_VOLTAGE) && (adc_reading <= THREE_QUARTER_VOLTAGE))
+		} else if (adc_reading <= THREE_QUARTER_VOLTAGE)
 		{
 			PORTD |= 0b00000011;
-		} else if ((adc_reading >= THREE_QUARTER_VOLTAGE) && (adc_reading < UPPER_THRESHOLD_VOLTAGE))
+		} else if (adc_reading < MAX_THRESHOLD_VOLTAGE)
 		{
 			PORTD |= 0b00000111;
-		} else if (adc_reading == UPPER_THRESHOLD_VOLTAGE)
+		} else if (adc_reading == MAX_THRESHOLD_VOLTAGE)
 		{
 			PORTD |= 0b00001111;
 		}
 	}
 }
 
+/***********************************************
+* main function
+***********************************************/
 int main(void)
 {
 	init();
     while(1)
 	{
-		if (adc_flag)
+		if (adc_flag) // checks new adc result available
 		{
 			if ((PINB & 0b00100000) == 0b00100000)
 			{
 				if ((PINB & 0b00010000) == 0b00000000)
 				{
-					display_flag = 1;
-					adc_display(display_flag);
+					adc_display(display_flag = 1); // set to full 8-bit mode
+					adc_flag = 0; // reset
 				}
 			} else if ((PINB & 0b00100000) == 0b00000000)
 			{
-				display_flag = 0;
-				adc_display(display_flag);
+				adc_display(display_flag = 0); // set to half 4-bit mode
+				adc_flag = 0;
 			}
 		}
 	}
@@ -178,17 +188,17 @@ int main(void)
 
 ISR(TIMER0_OVF_vect)
 {
-	TCNT0 = tcnt0_start;		// set to start value based on 0.125s or 0.5s 
-	++timecount0;	// count the number of times the interrupt has been reached
+	TCNT0 = tcnt0_start; // set to start value based on 0.125s or 0.5s 
+	++timecount0; // count the number of times the overflow has been reached
 	
-	if (timecount0 >= time_overflow)	// check if amount of overflows equals adc setting
+	if (timecount0 >= time_overflow) // check if amount of overflows equals adc setting
 	{
 		if ((PINB & 0b00100000) == 0b00100000)
 		{
 			if ((PINB & 0b00010000) == 0b00010000)
 			{
 				cylon_loop(0); // start 8-bit cylon pattern
-				timecount0 = 0;		// Restart the overflow counter
+				timecount0 = 0;	// Restart the overflow counter
 			}
 		} else {
 			cylon_loop(4); // start 4-bit cylon pattern
@@ -197,23 +207,19 @@ ISR(TIMER0_OVF_vect)
 	}
 }
 
-ISR (ADC_vect)	/* handles ADC interrupts  */
+ISR (ADC_vect) // adc ISR
 {
 	
-	adc_reading = ADC;   /* ADC is in Free Running Mode - you don't have to set up anything for 
-						    the next conversion */
-	if (adc_reading != 0) // check if new adc reading available
-	{
-		adc_flag = 1; // set flag
-	}
+	adc_reading = ADC; // store current adc value in variable
+	adc_flag = 1; // set flag
 	
-	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) && (adc_reading > 0)) // check adc voltage is between 0V-2.5V
+	if (adc_reading < LOWER_THRESHOLD_VOLTAGE) // check adc voltage is between 0V-2.5V
 	{
 		// 0.125s delay
 		tcnt0_start = 39; // for 0.125s delay we start the timer count at 39
 		time_overflow = 9; // for 0.125s delay we want 9 overflows to trigger an interrupt
 		
-	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
+	} else if (adc_reading < MAX_THRESHOLD_VOLTAGE) // otherwise if adc voltage is between 2.5V-5V
 	{
 		// 0.5s delay
 		tcnt0_start = 142; // for 0.5s delay we start the timer count at 142

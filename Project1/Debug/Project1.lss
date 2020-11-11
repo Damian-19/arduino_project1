@@ -3,31 +3,31 @@ Project1.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000588  2**0
+  0 .data         00000000  00800100  00800100  000004be  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000514  00000000  00000000  00000074  2**1
+  1 .text         0000044a  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000010  00800100  00800100  00000588  2**0
+  2 .bss          00000010  00800100  00800100  000004be  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000588  2**0
+  3 .comment      00000030  00000000  00000000  000004be  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000005b8  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000004f0  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000048  00000000  00000000  000005f8  2**0
+  5 .debug_aranges 00000048  00000000  00000000  00000530  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000080d  00000000  00000000  00000640  2**0
+  6 .debug_info   00000828  00000000  00000000  00000578  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000006c3  00000000  00000000  00000e4d  2**0
+  7 .debug_abbrev 000006c3  00000000  00000000  00000da0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000004c9  00000000  00000000  00001510  2**0
+  8 .debug_line   0000042d  00000000  00000000  00001463  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000d8  00000000  00000000  000019dc  2**2
+  9 .debug_frame  000000d8  00000000  00000000  00001890  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003e2  00000000  00000000  00001ab4  2**0
+ 10 .debug_str    000003e2  00000000  00000000  00001968  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000001a9  00000000  00000000  00001e96  2**0
+ 11 .debug_loc    000001a9  00000000  00000000  00001d4a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000038  00000000  00000000  0000203f  2**0
+ 12 .debug_ranges 00000038  00000000  00000000  00001ef3  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -49,12 +49,12 @@ Disassembly of section .text:
   34:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   38:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   3c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  40:	0c 94 e0 01 	jmp	0x3c0	; 0x3c0 <__vector_16>
+  40:	0c 94 8e 01 	jmp	0x31c	; 0x31c <__vector_16>
   44:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   48:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   4c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   50:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  54:	0c 94 30 02 	jmp	0x460	; 0x460 <__vector_21>
+  54:	0c 94 de 01 	jmp	0x3bc	; 0x3bc <__vector_21>
   58:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   5c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   60:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
@@ -81,8 +81,8 @@ Disassembly of section .text:
   7e:	a0 31       	cpi	r26, 0x10	; 16
   80:	b2 07       	cpc	r27, r18
   82:	e1 f7       	brne	.-8      	; 0x7c <.do_clear_bss_loop>
-  84:	0e 94 ba 01 	call	0x374	; 0x374 <main>
-  88:	0c 94 88 02 	jmp	0x510	; 0x510 <_exit>
+  84:	0e 94 65 01 	call	0x2ca	; 0x2ca <main>
+  88:	0c 94 23 02 	jmp	0x446	; 0x446 <_exit>
 
 0000008c <__bad_interrupt>:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -106,11 +106,11 @@ void init(void)
 	
 	// initialize global variables
 	timecount0 = 0;
-  9c:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <timecount0+0x1>
-  a0:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <timecount0>
+  9c:	10 92 05 01 	sts	0x0105, r1	; 0x800105 <timecount0+0x1>
+  a0:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <timecount0>
 	adc_flag = 0;
-  a4:	10 92 05 01 	sts	0x0105, r1	; 0x800105 <adc_flag+0x1>
-  a8:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <adc_flag>
+  a4:	10 92 07 01 	sts	0x0107, r1	; 0x800107 <adc_flag+0x1>
+  a8:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <adc_flag>
 	display_flag = 1; // initialize to 8-bit thermometer display
   ac:	81 e0       	ldi	r24, 0x01	; 1
   ae:	90 e0       	ldi	r25, 0x00	; 0
@@ -127,11 +127,11 @@ void init(void)
 	direction = 0; // start cylon eyes heading down (7->0)
   cc:	10 92 09 01 	sts	0x0109, r1	; 0x800109 <direction+0x1>
   d0:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <direction>
-	active_led = 7; // start cylon eyes at bit 7
+	active_pin = 7; // start cylon eyes at bit 7
   d4:	87 e0       	ldi	r24, 0x07	; 7
   d6:	90 e0       	ldi	r25, 0x00	; 0
-  d8:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <active_led+0x1>
-  dc:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <active_led>
+  d8:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <active_pin+0x1>
+  dc:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <active_pin>
 	
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
   e0:	85 e0       	ldi	r24, 0x05	; 5
@@ -164,38 +164,40 @@ void init(void)
  108:	08 95       	ret
 
 0000010a <cylon_loop>:
-*		should end (0, meaning full display; 4, meaning half display)
+*		  (0, meaning full display; 4, meaning half display)
 ***************************************************************************************************/
 void cylon_loop(int end)
 {
-	// cylon pattern
-	if (direction == 0) { // check if direction is down
+	// down
+	if (direction == 0) // check if direction is down
  10a:	20 91 08 01 	lds	r18, 0x0108	; 0x800108 <direction>
  10e:	30 91 09 01 	lds	r19, 0x0109	; 0x800109 <direction+0x1>
  112:	23 2b       	or	r18, r19
  114:	21 f5       	brne	.+72     	; 0x15e <cylon_loop+0x54>
-		active_led--; // decrement the active led
- 116:	20 91 06 01 	lds	r18, 0x0106	; 0x800106 <active_led>
- 11a:	30 91 07 01 	lds	r19, 0x0107	; 0x800107 <active_led+0x1>
+	{
+		active_pin--; // decrement the active led
+ 116:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <active_pin>
+ 11a:	30 91 03 01 	lds	r19, 0x0103	; 0x800103 <active_pin+0x1>
  11e:	21 50       	subi	r18, 0x01	; 1
  120:	31 09       	sbc	r19, r1
- 122:	30 93 07 01 	sts	0x0107, r19	; 0x800107 <active_led+0x1>
- 126:	20 93 06 01 	sts	0x0106, r18	; 0x800106 <active_led>
-		if (active_led <= end) { // check if led has reached the start (pin 4 or 0)
- 12a:	20 91 06 01 	lds	r18, 0x0106	; 0x800106 <active_led>
- 12e:	30 91 07 01 	lds	r19, 0x0107	; 0x800107 <active_led+0x1>
+ 122:	30 93 03 01 	sts	0x0103, r19	; 0x800103 <active_pin+0x1>
+ 126:	20 93 02 01 	sts	0x0102, r18	; 0x800102 <active_pin>
+		if (active_pin <= end) // check if led has reached the end (pin 4 or 0)
+ 12a:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <active_pin>
+ 12e:	30 91 03 01 	lds	r19, 0x0103	; 0x800103 <active_pin+0x1>
  132:	82 17       	cp	r24, r18
  134:	93 07       	cpc	r25, r19
- 136:	30 f0       	brcs	.+12     	; 0x144 <cylon_loop+0x3a>
+ 136:	34 f0       	brlt	.+12     	; 0x144 <cylon_loop+0x3a>
+		{
 			direction = 1; // set direction to up
  138:	81 e0       	ldi	r24, 0x01	; 1
  13a:	90 e0       	ldi	r25, 0x00	; 0
  13c:	90 93 09 01 	sts	0x0109, r25	; 0x800109 <direction+0x1>
  140:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <direction>
 		}
-		PORTD = 0b00000001 << active_led; // set pin of portd to current led
- 144:	20 91 06 01 	lds	r18, 0x0106	; 0x800106 <active_led>
- 148:	30 91 07 01 	lds	r19, 0x0107	; 0x800107 <active_led+0x1>
+		PORTD = 0b00000001 << active_pin; // set pin of portd to current led
+ 144:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <active_pin>
+ 148:	30 91 03 01 	lds	r19, 0x0103	; 0x800103 <active_pin+0x1>
  14c:	81 e0       	ldi	r24, 0x01	; 1
  14e:	90 e0       	ldi	r25, 0x00	; 0
  150:	02 c0       	rjmp	.+4      	; 0x156 <cylon_loop+0x4c>
@@ -206,29 +208,32 @@ void cylon_loop(int end)
  15a:	8b b9       	out	0x0b, r24	; 11
  15c:	08 95       	ret
 		
-		} else if (direction == 1) { // check if direction is up
+		// up
+	} else if (direction == 1) // check if direction is up
  15e:	80 91 08 01 	lds	r24, 0x0108	; 0x800108 <direction>
  162:	90 91 09 01 	lds	r25, 0x0109	; 0x800109 <direction+0x1>
  166:	01 97       	sbiw	r24, 0x01	; 1
  168:	f9 f4       	brne	.+62     	; 0x1a8 <cylon_loop+0x9e>
-		active_led++; // increment the active led
- 16a:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <active_led>
- 16e:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <active_led+0x1>
+	{
+		active_pin++; // increment the active led
+ 16a:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <active_pin>
+ 16e:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <active_pin+0x1>
  172:	01 96       	adiw	r24, 0x01	; 1
- 174:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <active_led+0x1>
- 178:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <active_led>
-		if (active_led >= 7) { // check if led has reached end (pin 7)
- 17c:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <active_led>
- 180:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <active_led+0x1>
+ 174:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <active_pin+0x1>
+ 178:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <active_pin>
+		if (active_pin >= 7) // check if led has reached end (pin 7)
+ 17c:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <active_pin>
+ 180:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <active_pin+0x1>
  184:	07 97       	sbiw	r24, 0x07	; 7
- 186:	20 f0       	brcs	.+8      	; 0x190 <cylon_loop+0x86>
+ 186:	24 f0       	brlt	.+8      	; 0x190 <cylon_loop+0x86>
+		{
 			direction = 0; // set direction to down
  188:	10 92 09 01 	sts	0x0109, r1	; 0x800109 <direction+0x1>
  18c:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <direction>
 		}
-		PORTD = 0b00000001 << active_led; // set pin of portd to current led
- 190:	20 91 06 01 	lds	r18, 0x0106	; 0x800106 <active_led>
- 194:	30 91 07 01 	lds	r19, 0x0107	; 0x800107 <active_led+0x1>
+		PORTD = 0b00000001 << active_pin; // set pin of portd to current led
+ 190:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <active_pin>
+ 194:	30 91 03 01 	lds	r19, 0x0103	; 0x800103 <active_pin+0x1>
  198:	81 e0       	ldi	r24, 0x01	; 1
  19a:	90 e0       	ldi	r25, 0x00	; 0
  19c:	02 c0       	rjmp	.+4      	; 0x1a2 <cylon_loop+0x98>
@@ -240,474 +245,399 @@ void cylon_loop(int end)
  1a8:	08 95       	ret
 
 000001aa <adc_display>:
-* display_flag: checks if display should be in 
-*				full 8-bit, or half 4-bit mode 
+* int display_flag: sets display to full 8-bit, 
+*				or half 4-bit mode 
 ***********************************************/
 void adc_display(int display_flag)
 {
-	if (display_flag == 1)
- 1aa:	81 30       	cpi	r24, 0x01	; 1
- 1ac:	91 05       	cpc	r25, r1
- 1ae:	09 f0       	breq	.+2      	; 0x1b2 <adc_display+0x8>
- 1b0:	90 c0       	rjmp	.+288    	; 0x2d2 <adc_display+0x128>
+	if (display_flag) // full 8-bit display, this takes control of PORTD
+ 1aa:	89 2b       	or	r24, r25
+ 1ac:	09 f4       	brne	.+2      	; 0x1b0 <adc_display+0x6>
+ 1ae:	59 c0       	rjmp	.+178    	; 0x262 <adc_display+0xb8>
 	{
-		if ((adc_reading >= 0) && (adc_reading <= ONE_EIGHT_VOLTAGE))
- 1b2:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 1b6:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 1ba:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 1be:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 1c2:	81 38       	cpi	r24, 0x81	; 129
- 1c4:	91 05       	cpc	r25, r1
- 1c6:	10 f4       	brcc	.+4      	; 0x1cc <adc_display+0x22>
+		if (adc_reading <= ONE_EIGHT_VOLTAGE)
+ 1b0:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 1b4:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 1b8:	81 38       	cpi	r24, 0x81	; 129
+ 1ba:	91 05       	cpc	r25, r1
+ 1bc:	10 f4       	brcc	.+4      	; 0x1c2 <adc_display+0x18>
 		{
 			PORTD = 0b00000000;
- 1c8:	1b b8       	out	0x0b, r1	; 11
- 1ca:	08 95       	ret
-		} else if ((adc_reading >= ONE_EIGHT_VOLTAGE) && (adc_reading <= ONE_QUARTER_VOLTAGE))
- 1cc:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 1d0:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 1d4:	80 38       	cpi	r24, 0x80	; 128
- 1d6:	91 05       	cpc	r25, r1
- 1d8:	50 f0       	brcs	.+20     	; 0x1ee <adc_display+0x44>
- 1da:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 1de:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 1e2:	81 30       	cpi	r24, 0x01	; 1
- 1e4:	91 40       	sbci	r25, 0x01	; 1
- 1e6:	18 f4       	brcc	.+6      	; 0x1ee <adc_display+0x44>
+ 1be:	1b b8       	out	0x0b, r1	; 11
+ 1c0:	08 95       	ret
+		} else if (adc_reading <= ONE_QUARTER_VOLTAGE)
+ 1c2:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 1c6:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 1ca:	81 30       	cpi	r24, 0x01	; 1
+ 1cc:	91 40       	sbci	r25, 0x01	; 1
+ 1ce:	18 f4       	brcc	.+6      	; 0x1d6 <adc_display+0x2c>
 		{
 			PORTD = 0b00000001;
- 1e8:	81 e0       	ldi	r24, 0x01	; 1
- 1ea:	8b b9       	out	0x0b, r24	; 11
- 1ec:	08 95       	ret
-		} else if ((adc_reading >= ONE_QUARTER_VOLTAGE) && (adc_reading <= THREE_EIGHT_VOLTAGE))
- 1ee:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 1f2:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 1f6:	8f 3f       	cpi	r24, 0xFF	; 255
- 1f8:	91 05       	cpc	r25, r1
- 1fa:	59 f0       	breq	.+22     	; 0x212 <adc_display+0x68>
- 1fc:	50 f0       	brcs	.+20     	; 0x212 <adc_display+0x68>
- 1fe:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 202:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 206:	81 38       	cpi	r24, 0x81	; 129
- 208:	91 40       	sbci	r25, 0x01	; 1
- 20a:	18 f4       	brcc	.+6      	; 0x212 <adc_display+0x68>
+ 1d0:	81 e0       	ldi	r24, 0x01	; 1
+ 1d2:	8b b9       	out	0x0b, r24	; 11
+ 1d4:	08 95       	ret
+		} else if (adc_reading <= THREE_EIGHT_VOLTAGE)
+ 1d6:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 1da:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 1de:	81 38       	cpi	r24, 0x81	; 129
+ 1e0:	91 40       	sbci	r25, 0x01	; 1
+ 1e2:	18 f4       	brcc	.+6      	; 0x1ea <adc_display+0x40>
 		{
 			PORTD = 0b00000011;
- 20c:	83 e0       	ldi	r24, 0x03	; 3
- 20e:	8b b9       	out	0x0b, r24	; 11
- 210:	08 95       	ret
-		} else if ((adc_reading >= THREE_EIGHT_VOLTAGE) && (adc_reading <= HALF_VOLTAGE))
- 212:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 216:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 21a:	80 38       	cpi	r24, 0x80	; 128
- 21c:	91 40       	sbci	r25, 0x01	; 1
- 21e:	50 f0       	brcs	.+20     	; 0x234 <adc_display+0x8a>
- 220:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 224:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 228:	81 30       	cpi	r24, 0x01	; 1
- 22a:	92 40       	sbci	r25, 0x02	; 2
- 22c:	18 f4       	brcc	.+6      	; 0x234 <adc_display+0x8a>
+ 1e4:	83 e0       	ldi	r24, 0x03	; 3
+ 1e6:	8b b9       	out	0x0b, r24	; 11
+ 1e8:	08 95       	ret
+		} else if (adc_reading <= HALF_VOLTAGE)
+ 1ea:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 1ee:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 1f2:	81 30       	cpi	r24, 0x01	; 1
+ 1f4:	92 40       	sbci	r25, 0x02	; 2
+ 1f6:	18 f4       	brcc	.+6      	; 0x1fe <adc_display+0x54>
 		{
 			PORTD = 0b00000111;
- 22e:	87 e0       	ldi	r24, 0x07	; 7
- 230:	8b b9       	out	0x0b, r24	; 11
- 232:	08 95       	ret
-		} else if ((adc_reading >= HALF_VOLTAGE) && (adc_reading <= FIVE_EIGHT_VOLTAGE))
- 234:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 238:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 23c:	81 15       	cp	r24, r1
- 23e:	92 40       	sbci	r25, 0x02	; 2
- 240:	50 f0       	brcs	.+20     	; 0x256 <adc_display+0xac>
- 242:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 246:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 24a:	80 38       	cpi	r24, 0x80	; 128
- 24c:	92 40       	sbci	r25, 0x02	; 2
- 24e:	18 f4       	brcc	.+6      	; 0x256 <adc_display+0xac>
+ 1f8:	87 e0       	ldi	r24, 0x07	; 7
+ 1fa:	8b b9       	out	0x0b, r24	; 11
+ 1fc:	08 95       	ret
+		} else if (adc_reading <= FIVE_EIGHT_VOLTAGE)
+ 1fe:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 202:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 206:	80 38       	cpi	r24, 0x80	; 128
+ 208:	92 40       	sbci	r25, 0x02	; 2
+ 20a:	18 f4       	brcc	.+6      	; 0x212 <adc_display+0x68>
 		{
 			PORTD = 0b00001111;
- 250:	8f e0       	ldi	r24, 0x0F	; 15
- 252:	8b b9       	out	0x0b, r24	; 11
- 254:	08 95       	ret
-		} else if ((adc_reading >= FIVE_EIGHT_VOLTAGE) && (adc_reading <= THREE_QUARTER_VOLTAGE))
- 256:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 25a:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 25e:	8f 37       	cpi	r24, 0x7F	; 127
- 260:	92 40       	sbci	r25, 0x02	; 2
- 262:	50 f0       	brcs	.+20     	; 0x278 <adc_display+0xce>
- 264:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 268:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 26c:	81 15       	cp	r24, r1
- 26e:	93 40       	sbci	r25, 0x03	; 3
- 270:	18 f4       	brcc	.+6      	; 0x278 <adc_display+0xce>
+ 20c:	8f e0       	ldi	r24, 0x0F	; 15
+ 20e:	8b b9       	out	0x0b, r24	; 11
+ 210:	08 95       	ret
+		} else if (adc_reading <= THREE_QUARTER_VOLTAGE)
+ 212:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 216:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 21a:	81 15       	cp	r24, r1
+ 21c:	93 40       	sbci	r25, 0x03	; 3
+ 21e:	18 f4       	brcc	.+6      	; 0x226 <adc_display+0x7c>
 		{
 			PORTD = 0b00011111;
- 272:	8f e1       	ldi	r24, 0x1F	; 31
- 274:	8b b9       	out	0x0b, r24	; 11
- 276:	08 95       	ret
-		} else if ((adc_reading >= THREE_QUARTER_VOLTAGE) && (adc_reading <= SEVEN_EIGHT_VOLTAGE))
- 278:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 27c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 280:	8f 3f       	cpi	r24, 0xFF	; 255
- 282:	92 40       	sbci	r25, 0x02	; 2
- 284:	50 f0       	brcs	.+20     	; 0x29a <adc_display+0xf0>
- 286:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 28a:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 28e:	80 38       	cpi	r24, 0x80	; 128
- 290:	93 40       	sbci	r25, 0x03	; 3
- 292:	18 f4       	brcc	.+6      	; 0x29a <adc_display+0xf0>
+ 220:	8f e1       	ldi	r24, 0x1F	; 31
+ 222:	8b b9       	out	0x0b, r24	; 11
+ 224:	08 95       	ret
+		} else if (adc_reading <= SEVEN_EIGHT_VOLTAGE)
+ 226:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 22a:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 22e:	80 38       	cpi	r24, 0x80	; 128
+ 230:	93 40       	sbci	r25, 0x03	; 3
+ 232:	18 f4       	brcc	.+6      	; 0x23a <adc_display+0x90>
 		{
 			PORTD = 0b00111111;
- 294:	8f e3       	ldi	r24, 0x3F	; 63
- 296:	8b b9       	out	0x0b, r24	; 11
- 298:	08 95       	ret
-		} else if ((adc_reading >= SEVEN_EIGHT_VOLTAGE) && (adc_reading < UPPER_THRESHOLD_VOLTAGE))
- 29a:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 29e:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 2a2:	8f 37       	cpi	r24, 0x7F	; 127
- 2a4:	93 40       	sbci	r25, 0x03	; 3
- 2a6:	50 f0       	brcs	.+20     	; 0x2bc <adc_display+0x112>
- 2a8:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 2ac:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 2b0:	8f 3f       	cpi	r24, 0xFF	; 255
- 2b2:	93 40       	sbci	r25, 0x03	; 3
- 2b4:	18 f4       	brcc	.+6      	; 0x2bc <adc_display+0x112>
+ 234:	8f e3       	ldi	r24, 0x3F	; 63
+ 236:	8b b9       	out	0x0b, r24	; 11
+ 238:	08 95       	ret
+		} else if (adc_reading < MAX_THRESHOLD_VOLTAGE)
+ 23a:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 23e:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 242:	8f 3f       	cpi	r24, 0xFF	; 255
+ 244:	93 40       	sbci	r25, 0x03	; 3
+ 246:	18 f4       	brcc	.+6      	; 0x24e <adc_display+0xa4>
 		{
 			PORTD = 0b01111111;
- 2b6:	8f e7       	ldi	r24, 0x7F	; 127
- 2b8:	8b b9       	out	0x0b, r24	; 11
- 2ba:	08 95       	ret
-		} else if (adc_reading == UPPER_THRESHOLD_VOLTAGE)
- 2bc:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 2c0:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 2c4:	8f 3f       	cpi	r24, 0xFF	; 255
- 2c6:	93 40       	sbci	r25, 0x03	; 3
- 2c8:	09 f0       	breq	.+2      	; 0x2cc <adc_display+0x122>
- 2ca:	53 c0       	rjmp	.+166    	; 0x372 <adc_display+0x1c8>
+ 248:	8f e7       	ldi	r24, 0x7F	; 127
+ 24a:	8b b9       	out	0x0b, r24	; 11
+ 24c:	08 95       	ret
+		} else if (adc_reading == MAX_THRESHOLD_VOLTAGE)
+ 24e:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 252:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 256:	8f 3f       	cpi	r24, 0xFF	; 255
+ 258:	93 40       	sbci	r25, 0x03	; 3
+ 25a:	b1 f5       	brne	.+108    	; 0x2c8 <adc_display+0x11e>
 		{
 			PORTD = 0b11111111;
- 2cc:	8f ef       	ldi	r24, 0xFF	; 255
- 2ce:	8b b9       	out	0x0b, r24	; 11
- 2d0:	08 95       	ret
+ 25c:	8f ef       	ldi	r24, 0xFF	; 255
+ 25e:	8b b9       	out	0x0b, r24	; 11
+ 260:	08 95       	ret
 		}
-	} else if (display_flag == 0)
- 2d2:	89 2b       	or	r24, r25
- 2d4:	09 f0       	breq	.+2      	; 0x2d8 <adc_display+0x12e>
- 2d6:	4d c0       	rjmp	.+154    	; 0x372 <adc_display+0x1c8>
+	} else if (!display_flag) // half 4-bit display, this only alters bits 0-3
 	{
-		if ((adc_reading >= 0) && (adc_reading <= ONE_QUARTER_VOLTAGE))
- 2d8:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 2dc:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 2e0:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 2e4:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 2e8:	81 30       	cpi	r24, 0x01	; 1
- 2ea:	91 40       	sbci	r25, 0x01	; 1
- 2ec:	18 f4       	brcc	.+6      	; 0x2f4 <adc_display+0x14a>
+		if (adc_reading <= ONE_QUARTER_VOLTAGE)
+ 262:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 266:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 26a:	81 30       	cpi	r24, 0x01	; 1
+ 26c:	91 40       	sbci	r25, 0x01	; 1
+ 26e:	18 f4       	brcc	.+6      	; 0x276 <adc_display+0xcc>
 		{
 			PORTD |= 0b00000000;
- 2ee:	8b b1       	in	r24, 0x0b	; 11
- 2f0:	8b b9       	out	0x0b, r24	; 11
- 2f2:	08 95       	ret
-		} else if ((adc_reading >= ONE_QUARTER_VOLTAGE) && (adc_reading <= HALF_VOLTAGE))
- 2f4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 2f8:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 2fc:	8f 3f       	cpi	r24, 0xFF	; 255
- 2fe:	91 05       	cpc	r25, r1
- 300:	51 f0       	breq	.+20     	; 0x316 <adc_display+0x16c>
- 302:	48 f0       	brcs	.+18     	; 0x316 <adc_display+0x16c>
- 304:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 308:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 30c:	81 30       	cpi	r24, 0x01	; 1
- 30e:	92 40       	sbci	r25, 0x02	; 2
- 310:	10 f4       	brcc	.+4      	; 0x316 <adc_display+0x16c>
+ 270:	8b b1       	in	r24, 0x0b	; 11
+ 272:	8b b9       	out	0x0b, r24	; 11
+ 274:	08 95       	ret
+		} else if (adc_reading <= HALF_VOLTAGE)
+ 276:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 27a:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 27e:	81 30       	cpi	r24, 0x01	; 1
+ 280:	92 40       	sbci	r25, 0x02	; 2
+ 282:	10 f4       	brcc	.+4      	; 0x288 <adc_display+0xde>
 		{
 			PORTD |= 0b00000001;
- 312:	58 9a       	sbi	0x0b, 0	; 11
- 314:	08 95       	ret
-		} else if ((adc_reading >= HALF_VOLTAGE) && (adc_reading <= THREE_QUARTER_VOLTAGE))
- 316:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 31a:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 31e:	81 15       	cp	r24, r1
- 320:	92 40       	sbci	r25, 0x02	; 2
- 322:	58 f0       	brcs	.+22     	; 0x33a <adc_display+0x190>
- 324:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 328:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 32c:	81 15       	cp	r24, r1
- 32e:	93 40       	sbci	r25, 0x03	; 3
- 330:	20 f4       	brcc	.+8      	; 0x33a <adc_display+0x190>
+ 284:	58 9a       	sbi	0x0b, 0	; 11
+ 286:	08 95       	ret
+		} else if (adc_reading <= THREE_QUARTER_VOLTAGE)
+ 288:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 28c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 290:	81 15       	cp	r24, r1
+ 292:	93 40       	sbci	r25, 0x03	; 3
+ 294:	20 f4       	brcc	.+8      	; 0x29e <adc_display+0xf4>
 		{
 			PORTD |= 0b00000011;
- 332:	8b b1       	in	r24, 0x0b	; 11
- 334:	83 60       	ori	r24, 0x03	; 3
- 336:	8b b9       	out	0x0b, r24	; 11
- 338:	08 95       	ret
-		} else if ((adc_reading >= THREE_QUARTER_VOLTAGE) && (adc_reading < UPPER_THRESHOLD_VOLTAGE))
- 33a:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 33e:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 342:	8f 3f       	cpi	r24, 0xFF	; 255
- 344:	92 40       	sbci	r25, 0x02	; 2
- 346:	58 f0       	brcs	.+22     	; 0x35e <adc_display+0x1b4>
- 348:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 34c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 350:	8f 3f       	cpi	r24, 0xFF	; 255
- 352:	93 40       	sbci	r25, 0x03	; 3
- 354:	20 f4       	brcc	.+8      	; 0x35e <adc_display+0x1b4>
+ 296:	8b b1       	in	r24, 0x0b	; 11
+ 298:	83 60       	ori	r24, 0x03	; 3
+ 29a:	8b b9       	out	0x0b, r24	; 11
+ 29c:	08 95       	ret
+		} else if (adc_reading < MAX_THRESHOLD_VOLTAGE)
+ 29e:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 2a2:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 2a6:	8f 3f       	cpi	r24, 0xFF	; 255
+ 2a8:	93 40       	sbci	r25, 0x03	; 3
+ 2aa:	20 f4       	brcc	.+8      	; 0x2b4 <adc_display+0x10a>
 		{
 			PORTD |= 0b00000111;
- 356:	8b b1       	in	r24, 0x0b	; 11
- 358:	87 60       	ori	r24, 0x07	; 7
- 35a:	8b b9       	out	0x0b, r24	; 11
- 35c:	08 95       	ret
-		} else if (adc_reading == UPPER_THRESHOLD_VOLTAGE)
- 35e:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 362:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 366:	8f 3f       	cpi	r24, 0xFF	; 255
- 368:	93 40       	sbci	r25, 0x03	; 3
- 36a:	19 f4       	brne	.+6      	; 0x372 <adc_display+0x1c8>
+ 2ac:	8b b1       	in	r24, 0x0b	; 11
+ 2ae:	87 60       	ori	r24, 0x07	; 7
+ 2b0:	8b b9       	out	0x0b, r24	; 11
+ 2b2:	08 95       	ret
+		} else if (adc_reading == MAX_THRESHOLD_VOLTAGE)
+ 2b4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 2b8:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 2bc:	8f 3f       	cpi	r24, 0xFF	; 255
+ 2be:	93 40       	sbci	r25, 0x03	; 3
+ 2c0:	19 f4       	brne	.+6      	; 0x2c8 <adc_display+0x11e>
 		{
 			PORTD |= 0b00001111;
- 36c:	8b b1       	in	r24, 0x0b	; 11
- 36e:	8f 60       	ori	r24, 0x0F	; 15
- 370:	8b b9       	out	0x0b, r24	; 11
- 372:	08 95       	ret
+ 2c2:	8b b1       	in	r24, 0x0b	; 11
+ 2c4:	8f 60       	ori	r24, 0x0F	; 15
+ 2c6:	8b b9       	out	0x0b, r24	; 11
+ 2c8:	08 95       	ret
 
-00000374 <main>:
-	}
-}
-
+000002ca <main>:
+/***********************************************
+* main function
+***********************************************/
 int main(void)
 {
 	init();
- 374:	0e 94 48 00 	call	0x90	; 0x90 <init>
+ 2ca:	0e 94 48 00 	call	0x90	; 0x90 <init>
 		{
 			if ((PINB & 0b00100000) == 0b00100000)
 			{
 				if ((PINB & 0b00010000) == 0b00000000)
 				{
-					display_flag = 1;
- 378:	c1 e0       	ldi	r28, 0x01	; 1
- 37a:	d0 e0       	ldi	r29, 0x00	; 0
+					adc_display(display_flag = 1); // set to full 8-bit mode
+ 2ce:	c1 e0       	ldi	r28, 0x01	; 1
+ 2d0:	d0 e0       	ldi	r29, 0x00	; 0
 int main(void)
 {
 	init();
     while(1)
 	{
-		if (adc_flag)
- 37c:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <adc_flag>
- 380:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <adc_flag+0x1>
- 384:	89 2b       	or	r24, r25
- 386:	d1 f3       	breq	.-12     	; 0x37c <main+0x8>
+		if (adc_flag) // checks new adc result available
+ 2d2:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <adc_flag>
+ 2d6:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <adc_flag+0x1>
+ 2da:	89 2b       	or	r24, r25
+ 2dc:	d1 f3       	breq	.-12     	; 0x2d2 <main+0x8>
 		{
 			if ((PINB & 0b00100000) == 0b00100000)
- 388:	1d 9b       	sbis	0x03, 5	; 3
- 38a:	0d c0       	rjmp	.+26     	; 0x3a6 <main+0x32>
+ 2de:	1d 9b       	sbis	0x03, 5	; 3
+ 2e0:	0e c0       	rjmp	.+28     	; 0x2fe <main+0x34>
 			{
 				if ((PINB & 0b00010000) == 0b00000000)
- 38c:	1c 99       	sbic	0x03, 4	; 3
- 38e:	f6 cf       	rjmp	.-20     	; 0x37c <main+0x8>
+ 2e2:	1c 99       	sbic	0x03, 4	; 3
+ 2e4:	f6 cf       	rjmp	.-20     	; 0x2d2 <main+0x8>
 				{
-					display_flag = 1;
- 390:	d0 93 0f 01 	sts	0x010F, r29	; 0x80010f <display_flag+0x1>
- 394:	c0 93 0e 01 	sts	0x010E, r28	; 0x80010e <display_flag>
-					adc_display(display_flag);
- 398:	80 91 0e 01 	lds	r24, 0x010E	; 0x80010e <display_flag>
- 39c:	90 91 0f 01 	lds	r25, 0x010F	; 0x80010f <display_flag+0x1>
- 3a0:	0e 94 d5 00 	call	0x1aa	; 0x1aa <adc_display>
- 3a4:	eb cf       	rjmp	.-42     	; 0x37c <main+0x8>
+					adc_display(display_flag = 1); // set to full 8-bit mode
+ 2e6:	d0 93 0f 01 	sts	0x010F, r29	; 0x80010f <display_flag+0x1>
+ 2ea:	c0 93 0e 01 	sts	0x010E, r28	; 0x80010e <display_flag>
+ 2ee:	ce 01       	movw	r24, r28
+ 2f0:	0e 94 d5 00 	call	0x1aa	; 0x1aa <adc_display>
+					adc_flag = 0; // reset
+ 2f4:	10 92 07 01 	sts	0x0107, r1	; 0x800107 <adc_flag+0x1>
+ 2f8:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <adc_flag>
+ 2fc:	ea cf       	rjmp	.-44     	; 0x2d2 <main+0x8>
 				}
 			} else if ((PINB & 0b00100000) == 0b00000000)
- 3a6:	1d 99       	sbic	0x03, 5	; 3
- 3a8:	e9 cf       	rjmp	.-46     	; 0x37c <main+0x8>
+ 2fe:	1d 99       	sbic	0x03, 5	; 3
+ 300:	e8 cf       	rjmp	.-48     	; 0x2d2 <main+0x8>
 			{
-				display_flag = 0;
- 3aa:	10 92 0f 01 	sts	0x010F, r1	; 0x80010f <display_flag+0x1>
- 3ae:	10 92 0e 01 	sts	0x010E, r1	; 0x80010e <display_flag>
-				adc_display(display_flag);
- 3b2:	80 91 0e 01 	lds	r24, 0x010E	; 0x80010e <display_flag>
- 3b6:	90 91 0f 01 	lds	r25, 0x010F	; 0x80010f <display_flag+0x1>
- 3ba:	0e 94 d5 00 	call	0x1aa	; 0x1aa <adc_display>
- 3be:	de cf       	rjmp	.-68     	; 0x37c <main+0x8>
+				adc_display(display_flag = 0); // set to half 4-bit mode
+ 302:	10 92 0f 01 	sts	0x010F, r1	; 0x80010f <display_flag+0x1>
+ 306:	10 92 0e 01 	sts	0x010E, r1	; 0x80010e <display_flag>
+ 30a:	80 e0       	ldi	r24, 0x00	; 0
+ 30c:	90 e0       	ldi	r25, 0x00	; 0
+ 30e:	0e 94 d5 00 	call	0x1aa	; 0x1aa <adc_display>
+				adc_flag = 0;
+ 312:	10 92 07 01 	sts	0x0107, r1	; 0x800107 <adc_flag+0x1>
+ 316:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <adc_flag>
+ 31a:	db cf       	rjmp	.-74     	; 0x2d2 <main+0x8>
 
-000003c0 <__vector_16>:
+0000031c <__vector_16>:
 		}
 	}
 }
 
 ISR(TIMER0_OVF_vect)
 {
- 3c0:	1f 92       	push	r1
- 3c2:	0f 92       	push	r0
- 3c4:	0f b6       	in	r0, 0x3f	; 63
- 3c6:	0f 92       	push	r0
- 3c8:	11 24       	eor	r1, r1
- 3ca:	2f 93       	push	r18
- 3cc:	3f 93       	push	r19
- 3ce:	4f 93       	push	r20
- 3d0:	5f 93       	push	r21
- 3d2:	6f 93       	push	r22
- 3d4:	7f 93       	push	r23
- 3d6:	8f 93       	push	r24
- 3d8:	9f 93       	push	r25
- 3da:	af 93       	push	r26
- 3dc:	bf 93       	push	r27
- 3de:	ef 93       	push	r30
- 3e0:	ff 93       	push	r31
-	TCNT0 = tcnt0_start;		// set to start value based on 0.125s or 0.5s 
- 3e2:	80 91 0c 01 	lds	r24, 0x010C	; 0x80010c <tcnt0_start>
- 3e6:	90 91 0d 01 	lds	r25, 0x010D	; 0x80010d <tcnt0_start+0x1>
- 3ea:	86 bd       	out	0x26, r24	; 38
-	++timecount0;	// count the number of times the interrupt has been reached
- 3ec:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <timecount0>
- 3f0:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <timecount0+0x1>
- 3f4:	01 96       	adiw	r24, 0x01	; 1
- 3f6:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <timecount0+0x1>
- 3fa:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <timecount0>
+ 31c:	1f 92       	push	r1
+ 31e:	0f 92       	push	r0
+ 320:	0f b6       	in	r0, 0x3f	; 63
+ 322:	0f 92       	push	r0
+ 324:	11 24       	eor	r1, r1
+ 326:	2f 93       	push	r18
+ 328:	3f 93       	push	r19
+ 32a:	4f 93       	push	r20
+ 32c:	5f 93       	push	r21
+ 32e:	6f 93       	push	r22
+ 330:	7f 93       	push	r23
+ 332:	8f 93       	push	r24
+ 334:	9f 93       	push	r25
+ 336:	af 93       	push	r26
+ 338:	bf 93       	push	r27
+ 33a:	ef 93       	push	r30
+ 33c:	ff 93       	push	r31
+	TCNT0 = tcnt0_start; // set to start value based on 0.125s or 0.5s 
+ 33e:	80 91 0c 01 	lds	r24, 0x010C	; 0x80010c <tcnt0_start>
+ 342:	90 91 0d 01 	lds	r25, 0x010D	; 0x80010d <tcnt0_start+0x1>
+ 346:	86 bd       	out	0x26, r24	; 38
+	++timecount0; // count the number of times the overflow has been reached
+ 348:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <timecount0>
+ 34c:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <timecount0+0x1>
+ 350:	01 96       	adiw	r24, 0x01	; 1
+ 352:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <timecount0+0x1>
+ 356:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <timecount0>
 	
-	if (timecount0 >= time_overflow)	// check if amount of overflows equals adc setting
- 3fe:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <timecount0>
- 402:	30 91 03 01 	lds	r19, 0x0103	; 0x800103 <timecount0+0x1>
- 406:	80 91 0a 01 	lds	r24, 0x010A	; 0x80010a <time_overflow>
- 40a:	90 91 0b 01 	lds	r25, 0x010B	; 0x80010b <time_overflow+0x1>
- 40e:	28 17       	cp	r18, r24
- 410:	39 07       	cpc	r19, r25
- 412:	a8 f0       	brcs	.+42     	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
+	if (timecount0 >= time_overflow) // check if amount of overflows equals adc setting
+ 35a:	20 91 04 01 	lds	r18, 0x0104	; 0x800104 <timecount0>
+ 35e:	30 91 05 01 	lds	r19, 0x0105	; 0x800105 <timecount0+0x1>
+ 362:	80 91 0a 01 	lds	r24, 0x010A	; 0x80010a <time_overflow>
+ 366:	90 91 0b 01 	lds	r25, 0x010B	; 0x80010b <time_overflow+0x1>
+ 36a:	28 17       	cp	r18, r24
+ 36c:	39 07       	cpc	r19, r25
+ 36e:	a8 f0       	brcs	.+42     	; 0x39a <__vector_16+0x7e>
 	{
 		if ((PINB & 0b00100000) == 0b00100000)
- 414:	1d 9b       	sbis	0x03, 5	; 3
- 416:	0b c0       	rjmp	.+22     	; 0x42e <__LOCK_REGION_LENGTH__+0x2e>
+ 370:	1d 9b       	sbis	0x03, 5	; 3
+ 372:	0b c0       	rjmp	.+22     	; 0x38a <__vector_16+0x6e>
 		{
 			if ((PINB & 0b00010000) == 0b00010000)
- 418:	1c 9b       	sbis	0x03, 4	; 3
- 41a:	11 c0       	rjmp	.+34     	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
+ 374:	1c 9b       	sbis	0x03, 4	; 3
+ 376:	11 c0       	rjmp	.+34     	; 0x39a <__vector_16+0x7e>
 			{
 				cylon_loop(0); // start 8-bit cylon pattern
- 41c:	80 e0       	ldi	r24, 0x00	; 0
- 41e:	90 e0       	ldi	r25, 0x00	; 0
- 420:	0e 94 85 00 	call	0x10a	; 0x10a <cylon_loop>
-				timecount0 = 0;		// Restart the overflow counter
- 424:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <timecount0+0x1>
- 428:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <timecount0>
- 42c:	08 c0       	rjmp	.+16     	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
+ 378:	80 e0       	ldi	r24, 0x00	; 0
+ 37a:	90 e0       	ldi	r25, 0x00	; 0
+ 37c:	0e 94 85 00 	call	0x10a	; 0x10a <cylon_loop>
+				timecount0 = 0;	// Restart the overflow counter
+ 380:	10 92 05 01 	sts	0x0105, r1	; 0x800105 <timecount0+0x1>
+ 384:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <timecount0>
+ 388:	08 c0       	rjmp	.+16     	; 0x39a <__vector_16+0x7e>
 			}
 		} else {
 			cylon_loop(4); // start 4-bit cylon pattern
- 42e:	84 e0       	ldi	r24, 0x04	; 4
- 430:	90 e0       	ldi	r25, 0x00	; 0
- 432:	0e 94 85 00 	call	0x10a	; 0x10a <cylon_loop>
+ 38a:	84 e0       	ldi	r24, 0x04	; 4
+ 38c:	90 e0       	ldi	r25, 0x00	; 0
+ 38e:	0e 94 85 00 	call	0x10a	; 0x10a <cylon_loop>
 			timecount0 = 0;
- 436:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <timecount0+0x1>
- 43a:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <timecount0>
+ 392:	10 92 05 01 	sts	0x0105, r1	; 0x800105 <timecount0+0x1>
+ 396:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <timecount0>
 		}
 	}
 }
- 43e:	ff 91       	pop	r31
- 440:	ef 91       	pop	r30
- 442:	bf 91       	pop	r27
- 444:	af 91       	pop	r26
- 446:	9f 91       	pop	r25
- 448:	8f 91       	pop	r24
- 44a:	7f 91       	pop	r23
- 44c:	6f 91       	pop	r22
- 44e:	5f 91       	pop	r21
- 450:	4f 91       	pop	r20
- 452:	3f 91       	pop	r19
- 454:	2f 91       	pop	r18
- 456:	0f 90       	pop	r0
- 458:	0f be       	out	0x3f, r0	; 63
- 45a:	0f 90       	pop	r0
- 45c:	1f 90       	pop	r1
- 45e:	18 95       	reti
+ 39a:	ff 91       	pop	r31
+ 39c:	ef 91       	pop	r30
+ 39e:	bf 91       	pop	r27
+ 3a0:	af 91       	pop	r26
+ 3a2:	9f 91       	pop	r25
+ 3a4:	8f 91       	pop	r24
+ 3a6:	7f 91       	pop	r23
+ 3a8:	6f 91       	pop	r22
+ 3aa:	5f 91       	pop	r21
+ 3ac:	4f 91       	pop	r20
+ 3ae:	3f 91       	pop	r19
+ 3b0:	2f 91       	pop	r18
+ 3b2:	0f 90       	pop	r0
+ 3b4:	0f be       	out	0x3f, r0	; 63
+ 3b6:	0f 90       	pop	r0
+ 3b8:	1f 90       	pop	r1
+ 3ba:	18 95       	reti
 
-00000460 <__vector_21>:
+000003bc <__vector_21>:
 
-ISR (ADC_vect)	/* handles ADC interrupts  */
+ISR (ADC_vect) // adc ISR
 {
- 460:	1f 92       	push	r1
- 462:	0f 92       	push	r0
- 464:	0f b6       	in	r0, 0x3f	; 63
- 466:	0f 92       	push	r0
- 468:	11 24       	eor	r1, r1
- 46a:	2f 93       	push	r18
- 46c:	8f 93       	push	r24
- 46e:	9f 93       	push	r25
+ 3bc:	1f 92       	push	r1
+ 3be:	0f 92       	push	r0
+ 3c0:	0f b6       	in	r0, 0x3f	; 63
+ 3c2:	0f 92       	push	r0
+ 3c4:	11 24       	eor	r1, r1
+ 3c6:	2f 93       	push	r18
+ 3c8:	8f 93       	push	r24
+ 3ca:	9f 93       	push	r25
 	
-	adc_reading = ADC;   /* ADC is in Free Running Mode - you don't have to set up anything for 
- 470:	80 91 78 00 	lds	r24, 0x0078	; 0x800078 <__DATA_REGION_ORIGIN__+0x18>
- 474:	90 91 79 00 	lds	r25, 0x0079	; 0x800079 <__DATA_REGION_ORIGIN__+0x19>
- 478:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <_edata+0x1>
- 47c:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <_edata>
-						    the next conversion */
-	if (adc_reading != 0) // check if new adc reading available
- 480:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 484:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 488:	89 2b       	or	r24, r25
- 48a:	31 f0       	breq	.+12     	; 0x498 <__vector_21+0x38>
-	{
-		adc_flag = 1; // set flag
- 48c:	81 e0       	ldi	r24, 0x01	; 1
- 48e:	90 e0       	ldi	r25, 0x00	; 0
- 490:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <adc_flag+0x1>
- 494:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <adc_flag>
-	}
+	adc_reading = ADC; // store current adc value in variable
+ 3cc:	80 91 78 00 	lds	r24, 0x0078	; 0x800078 <__DATA_REGION_ORIGIN__+0x18>
+ 3d0:	90 91 79 00 	lds	r25, 0x0079	; 0x800079 <__DATA_REGION_ORIGIN__+0x19>
+ 3d4:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <_edata+0x1>
+ 3d8:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <_edata>
+	adc_flag = 1; // set flag
+ 3dc:	81 e0       	ldi	r24, 0x01	; 1
+ 3de:	90 e0       	ldi	r25, 0x00	; 0
+ 3e0:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <adc_flag+0x1>
+ 3e4:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <adc_flag>
 	
-	if ((adc_reading < LOWER_THRESHOLD_VOLTAGE) && (adc_reading > 0)) // check adc voltage is between 0V-2.5V
- 498:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 49c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4a0:	8f 3f       	cpi	r24, 0xFF	; 255
- 4a2:	91 40       	sbci	r25, 0x01	; 1
- 4a4:	98 f4       	brcc	.+38     	; 0x4cc <__vector_21+0x6c>
- 4a6:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 4aa:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4ae:	89 2b       	or	r24, r25
- 4b0:	69 f0       	breq	.+26     	; 0x4cc <__vector_21+0x6c>
+	if (adc_reading < LOWER_THRESHOLD_VOLTAGE) // check adc voltage is between 0V-2.5V
+ 3e8:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 3ec:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 3f0:	8f 3f       	cpi	r24, 0xFF	; 255
+ 3f2:	91 40       	sbci	r25, 0x01	; 1
+ 3f4:	68 f4       	brcc	.+26     	; 0x410 <__LOCK_REGION_LENGTH__+0x10>
 	{
 		// 0.125s delay
 		tcnt0_start = 39; // for 0.125s delay we start the timer count at 39
- 4b2:	87 e2       	ldi	r24, 0x27	; 39
- 4b4:	90 e0       	ldi	r25, 0x00	; 0
- 4b6:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
- 4ba:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
+ 3f6:	87 e2       	ldi	r24, 0x27	; 39
+ 3f8:	90 e0       	ldi	r25, 0x00	; 0
+ 3fa:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
+ 3fe:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
 		time_overflow = 9; // for 0.125s delay we want 9 overflows to trigger an interrupt
- 4be:	89 e0       	ldi	r24, 0x09	; 9
- 4c0:	90 e0       	ldi	r25, 0x00	; 0
- 4c2:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_overflow+0x1>
- 4c6:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_overflow>
- 4ca:	1a c0       	rjmp	.+52     	; 0x500 <__vector_21+0xa0>
+ 402:	89 e0       	ldi	r24, 0x09	; 9
+ 404:	90 e0       	ldi	r25, 0x00	; 0
+ 406:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_overflow+0x1>
+ 40a:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_overflow>
+ 40e:	13 c0       	rjmp	.+38     	; 0x436 <__LOCK_REGION_LENGTH__+0x36>
 		
-	} else if ((adc_reading < UPPER_THRESHOLD_VOLTAGE) && (adc_reading > LOWER_THRESHOLD_VOLTAGE)) // otherwise if adc voltage is between 2.5V-5V
- 4cc:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 4d0:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4d4:	8f 3f       	cpi	r24, 0xFF	; 255
- 4d6:	93 40       	sbci	r25, 0x03	; 3
- 4d8:	98 f4       	brcc	.+38     	; 0x500 <__vector_21+0xa0>
- 4da:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 4de:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
- 4e2:	81 15       	cp	r24, r1
- 4e4:	92 40       	sbci	r25, 0x02	; 2
- 4e6:	60 f0       	brcs	.+24     	; 0x500 <__vector_21+0xa0>
+	} else if (adc_reading < MAX_THRESHOLD_VOLTAGE) // otherwise if adc voltage is between 2.5V-5V
+ 410:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 414:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
+ 418:	8f 3f       	cpi	r24, 0xFF	; 255
+ 41a:	93 40       	sbci	r25, 0x03	; 3
+ 41c:	60 f4       	brcc	.+24     	; 0x436 <__LOCK_REGION_LENGTH__+0x36>
 	{
 		// 0.5s delay
 		tcnt0_start = 142; // for 0.5s delay we start the timer count at 142
- 4e8:	8e e8       	ldi	r24, 0x8E	; 142
- 4ea:	90 e0       	ldi	r25, 0x00	; 0
- 4ec:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
- 4f0:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
+ 41e:	8e e8       	ldi	r24, 0x8E	; 142
+ 420:	90 e0       	ldi	r25, 0x00	; 0
+ 422:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <tcnt0_start+0x1>
+ 426:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <tcnt0_start>
 		time_overflow = 55; // for 0.5s delay we want 55 overflows to trigger an interrupt
- 4f4:	87 e3       	ldi	r24, 0x37	; 55
- 4f6:	90 e0       	ldi	r25, 0x00	; 0
- 4f8:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_overflow+0x1>
- 4fc:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_overflow>
+ 42a:	87 e3       	ldi	r24, 0x37	; 55
+ 42c:	90 e0       	ldi	r25, 0x00	; 0
+ 42e:	90 93 0b 01 	sts	0x010B, r25	; 0x80010b <time_overflow+0x1>
+ 432:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <time_overflow>
 	}
- 500:	9f 91       	pop	r25
- 502:	8f 91       	pop	r24
- 504:	2f 91       	pop	r18
- 506:	0f 90       	pop	r0
- 508:	0f be       	out	0x3f, r0	; 63
- 50a:	0f 90       	pop	r0
- 50c:	1f 90       	pop	r1
- 50e:	18 95       	reti
+ 436:	9f 91       	pop	r25
+ 438:	8f 91       	pop	r24
+ 43a:	2f 91       	pop	r18
+ 43c:	0f 90       	pop	r0
+ 43e:	0f be       	out	0x3f, r0	; 63
+ 440:	0f 90       	pop	r0
+ 442:	1f 90       	pop	r1
+ 444:	18 95       	reti
 
-00000510 <_exit>:
- 510:	f8 94       	cli
+00000446 <_exit>:
+ 446:	f8 94       	cli
 
-00000512 <__stop_program>:
- 512:	ff cf       	rjmp	.-2      	; 0x512 <__stop_program>
+00000448 <__stop_program>:
+ 448:	ff cf       	rjmp	.-2      	; 0x448 <__stop_program>
