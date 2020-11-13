@@ -141,6 +141,7 @@ void adc_display(int display_flag)
 		}
 	} else if (!display_flag) // half 4-bit display, this only alters bits 0-3
 	{
+		PORTD &= ~0b00001111;
 		if (adc_reading <= ONE_QUARTER_VOLTAGE)
 		{
 			PORTD |= 0b00000000;
