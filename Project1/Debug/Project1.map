@@ -183,7 +183,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x450
+.text           0x00000000      0x44c
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -266,27 +266,27 @@ END GROUP
                 0x0000008c                __vector_20
                 0x00000090                . = ALIGN (0x2)
  *(.text.*)
- .text.init     0x00000090       0x7a main.o
+ .text.init     0x00000090       0x76 main.o
                 0x00000090                init
  .text.cylon_loop
-                0x0000010a       0xa0 main.o
-                0x0000010a                cylon_loop
+                0x00000106       0xa0 main.o
+                0x00000106                cylon_loop
  .text.adc_display
-                0x000001aa      0x126 main.o
-                0x000001aa                adc_display
- .text.main     0x000002d0       0x52 main.o
-                0x000002d0                main
+                0x000001a6      0x126 main.o
+                0x000001a6                adc_display
+ .text.main     0x000002cc       0x52 main.o
+                0x000002cc                main
  .text.__vector_16
-                0x00000322       0xa0 main.o
-                0x00000322                __vector_16
+                0x0000031e       0xa0 main.o
+                0x0000031e                __vector_16
  .text.__vector_21
-                0x000003c2       0x8a main.o
-                0x000003c2                __vector_21
-                0x0000044c                . = ALIGN (0x2)
+                0x000003be       0x8a main.o
+                0x000003be                __vector_21
+                0x00000448                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000044c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000044c                _exit
-                0x0000044c                exit
+ .fini9         0x00000448        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000448                _exit
+                0x00000448                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -305,11 +305,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000044c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000448        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000450                _etext = .
+                0x0000044c                _etext = .
 
-.data           0x00800100        0x0 load address 0x00000450
+.data           0x00800100        0x0 load address 0x0000044c
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -336,8 +336,8 @@ END GROUP
                 0x0080010c                tcnt0_start
                 0x0080010e                display_flag
                 0x00800110                PROVIDE (__bss_end, .)
-                0x00000450                __data_load_start = LOADADDR (.data)
-                0x00000450                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000044c                __data_load_start = LOADADDR (.data)
+                0x0000044c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800110        0x0
                 [!provide]                PROVIDE (__noinit_start, .)

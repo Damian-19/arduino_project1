@@ -22,7 +22,7 @@
 
 // declare all global variables as volatile to avoid compiler optimization
 volatile unsigned int timecount0; // number of overflows reached
-volatile int time_overflow; // number of overflows needed
+volatile unsigned int time_overflow; // number of overflows needed
 volatile int tcnt0_start; // counter start
 volatile int adc_flag; // new adc result flag
 volatile int display_flag; // check if portb bit 4 is pressed
@@ -49,7 +49,7 @@ void init(void)
 	tcnt0_start = 125; // begin timer count at 125
 	time_overflow = 0;
 	direction = 0; // start cylon eyes heading down (7->0)
-	active_pin = 7; // start cylon eyes at bit 7
+	active_pin = 0; // start cylon eyes at bit 7
 	
 	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
 	
