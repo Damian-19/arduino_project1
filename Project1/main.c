@@ -31,40 +31,54 @@ volatile uint16_t adc_reading; // variable to hold adc reading
 volatile int direction; // direction of cylon eyes travel
 volatile int active_pin; // current active pin in cylon pattern
 
-/***************************
-*initialization function 
-***************************/
-void init(void)
+
+/********************************
+* timer initialization function
+*********************************/
+void timer_init(void)
 {
-	//Set PortD to all outputs because LEDs are connected to this PORT
-	DDRD = 0xff;	// 0xff = 0b11111111; all ones
-	PORTD = 0;		// 
-	DDRB = 0b00000000; // set PORTB to inputs
-	PORTB = 0b00110000; // enable pull up resistors on pins 4 & 5
-	
+		timecount0 = 0; // initialize to 0
+		tcnt0_start = 125; // begin timer count at 125
+		time_overflow = 0; // initialize to 0
+		
+		TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
+		
+		TCCR0A = 0;			// Not strictly necessary as these are the reset states
+		
+		TCNT0 = tcnt0_start;	// assign timer count start
+		TIMSK0 = (1<<TOIE0);	// Enable Timer 0 interrupt
+}
+
+/********************************
+* adc initialization function
+*********************************/
+void adc_init(void)
+{
 	// initialize global variables
-	timecount0 = 0;
-	adc_flag = 0;
+
+	adc_flag = 0; // set if new adc result available
 	display_flag = 1; // initialize to 8-bit thermometer display
-	tcnt0_start = 125; // begin timer count at 125
-	time_overflow = 0;
 	direction = 0; // start cylon eyes heading down (7->0)
 	active_pin = 0; // start cylon eyes at bit 7
-	
-	TCCR0B = (5<<CS00);	// Set T0 Source = Clock (16MHz)/1024 and put Timer in Normal mode
-	
-	TCCR0A = 0;			// Not strictly necessary as these are the reset states but it's good
-	// practice to show what you're doing
-	TCNT0 = tcnt0_start;	// assign timer count start
-	TIMSK0 = (1<<TOIE0);	// Enable Timer 0 interrupt
 	
 	// ADC initialization
 	ADMUX = ((1<<REFS0) | (0 << ADLAR) | (0<<MUX0));  // AVCC selected for VREF, ADC0 as ADC input
 	ADCSRA = ((1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(6<<ADPS0)); /* Enable ADC, Start Conversion, Auto Trigger enabled, 
 																		Interrupt enabled, Prescale = 64  */
 	ADCSRB = (0<<ADTS0); // Select AutoTrigger Source to Free Running Mode
+}
+
+/********************************
+* main initialization function 
+*********************************/
+void init(void)
+{
+	DDRD = 0xff;	// 0xff = 0b11111111; all ones
+	PORTD = 0;		// 
+	DDRB = 0b00000000; // set PORTB to inputs
+	PORTB = 0b00110000; // enable pull up resistors on pins 4 & 5
 	
-	sei();				// Global interrupt enable (I=1)
+	sei();				// Global interrupt enable
 }
 
 /**************************************************************************************************
@@ -166,6 +180,8 @@ void adc_display(int display_flag)
 ***********************************************/
 int main(void)
 {
+	timer_init();
+	adc_init();
 	init();
     while(1)
 	{
@@ -173,12 +189,12 @@ int main(void)
 		{
 			if ((PINB & 0b00100000) == 0b00100000)
 			{
-				if ((PINB & 0b00010000) == 0b00000000)
+				if ((PINB & 0b00010000) == 0)
 				{
 					adc_display(display_flag = 1); // set to full 8-bit mode
 					adc_flag = 0; // reset
 				}
-			} else if ((PINB & 0b00100000) == 0b00000000)
+			} else if ((PINB & 0b00100000) == 0)
 			{
 				adc_display(display_flag = 0); // set to half 4-bit mode
 				adc_flag = 0;
