@@ -211,6 +211,12 @@ int main(void)
 	}
 }
 
+/******************************************************
+* Timer0 overflow vector ISR
+*
+* controls the time delay for the cylon pattern &
+* checks if the cylon should be in 8 or 4-bit mode
+******************************************************/
 ISR(TIMER0_OVF_vect) // timer0 ISR
 {
 	TCNT0 = tcnt0_start; // set to start value based on 0.125s or 0.5s 
@@ -231,7 +237,12 @@ ISR(TIMER0_OVF_vect) // timer0 ISR
 		}
 	}
 }
-
+/******************************************************************
+* ADC vector ISR
+*
+* controls the timer0 start & overflow for the cylon pattern &
+* saves the adc value for the adc thermometer display
+******************************************************************/
 ISR (ADC_vect) // adc ISR
 {
 	
