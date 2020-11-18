@@ -12,7 +12,7 @@
 #include <avr/interrupt.h>
 
 // adc threshold values
-#define LOWER_THRESHOLD_VOLTAGE 511
+#define LOWER_THRESHOLD_VOLTAGE 511 // 2.5V
 #define ONE_EIGHT_VOLTAGE 128
 #define ONE_QUARTER_VOLTAGE 256
 #define THREE_EIGHT_VOLTAGE 384
@@ -20,7 +20,7 @@
 #define FIVE_EIGHT_VOLTAGE 639
 #define THREE_QUARTER_VOLTAGE 767
 #define SEVEN_EIGHT_VOLTAGE 895
-#define MAX_THRESHOLD_VOLTAGE 1023
+#define MAX_THRESHOLD_VOLTAGE 1023 // 5V
 
 // declare all global variables as volatile to avoid compiler optimization
 volatile unsigned int timecount0; // number of overflows reached
@@ -120,6 +120,7 @@ void cylon_loop(int end)
 
 /***********************************************
 * adc thermometer display
+*
 * int display_flag: sets display to full 8-bit, 
 *				or half 4-bit mode 
 ***********************************************/
@@ -127,6 +128,7 @@ void adc_display(int display_flag)
 {
 	if (display_flag) // full 8-bit display, this takes control of PORTD
 	{
+		// test adc value and alter pins
 		if (adc_reading <= ONE_EIGHT_VOLTAGE)
 		{
 			PORTD = 0b00000000;
@@ -157,7 +159,8 @@ void adc_display(int display_flag)
 		}
 	} else if (!display_flag) // half 4-bit display, this only alters bits 0-3
 	{
-		PORTD &= ~0b00001111;
+		PORTD &= ~0b00001111; // clear bits 0-3
+		// test adc value and alter pins
 		if (adc_reading <= ONE_QUARTER_VOLTAGE)
 		{
 			PORTD |= 0b00000000;
@@ -177,9 +180,12 @@ void adc_display(int display_flag)
 	}
 }
 
-/***********************************************
+/****************************************************
 * main function
-***********************************************/
+*
+* checks if buttons (PINB5 & PINB4) are pressed, 
+* and sets adc display to the appropriate mode
+****************************************************/
 int main(void)
 {
 	timer_init(); // call initialisation for timer registers/variables
@@ -187,16 +193,16 @@ int main(void)
 	port_init(); // call initialisation for port registers
     while(1)
 	{
-		if (adc_flag) // checks new adc result available
+		if (adc_flag) // check new adc result available
 		{
-			if ((PINB & 0b00100000) == 0b00100000)
+			if ((PINB & 0b00100000) == 0b00100000) // check PINB bit 5 is 1 (not pressed)
 			{
-				if ((PINB & 0b00010000) == 0)
+				if ((PINB & 0b00010000) == 0) // check PINB bit 4 is 0 (pressed)
 				{
 					adc_display(display_flag = 1); // set to full 8-bit mode
 					adc_flag = 0; // reset
 				}
-			} else if ((PINB & 0b00100000) == 0)
+			} else if ((PINB & 0b00100000) == 0) // check if PINB bit 5 is 0 (pressed)
 			{
 				adc_display(display_flag = 0); // set to half 4-bit mode
 				adc_flag = 0;
@@ -212,9 +218,9 @@ ISR(TIMER0_OVF_vect) // timer0 ISR
 	
 	if (timecount0 >= time_overflow) // check if amount of overflows equals adc setting
 	{
-		if ((PINB & 0b00100000) == 0b00100000)
+		if ((PINB & 0b00100000) == 0b00100000) // check PINB bit 5 is 1 (not pressed)
 		{
-			if ((PINB & 0b00010000) == 0b00010000)
+			if ((PINB & 0b00010000) == 0b00010000) // check PINB bit 4 is 1 (not pressed)
 			{
 				cylon_loop(0); // start 8-bit cylon pattern
 				timecount0 = 0;	// Restart the overflow counter

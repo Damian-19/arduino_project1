@@ -267,6 +267,7 @@ void adc_display(int display_flag)
  1ac:	09 f4       	brne	.+2      	; 0x1b0 <adc_display+0x6>
  1ae:	59 c0       	rjmp	.+178    	; 0x262 <adc_display+0xb8>
 	{
+		// test adc value and alter pins
 		if (adc_reading <= ONE_EIGHT_VOLTAGE)
  1b0:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
  1b4:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
@@ -368,10 +369,11 @@ void adc_display(int display_flag)
 		}
 	} else if (!display_flag) // half 4-bit display, this only alters bits 0-3
 	{
-		PORTD &= ~0b00001111;
+		PORTD &= ~0b00001111; // clear bits 0-3
  262:	8b b1       	in	r24, 0x0b	; 11
  264:	80 7f       	andi	r24, 0xF0	; 240
  266:	8b b9       	out	0x0b, r24	; 11
+		// test adc value and alter pins
 		if (adc_reading <= ONE_QUARTER_VOLTAGE)
  268:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
  26c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
