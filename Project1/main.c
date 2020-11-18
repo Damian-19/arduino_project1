@@ -65,7 +65,7 @@ void adc_init(void)
 	
 	// ADC initialization
 	ADMUX = ((1<<REFS0) | (0 << ADLAR) | (0<<MUX0));  // AVCC selected for VREF, ADC0 as ADC input
-	ADCSRA = ((1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(6<<ADPS0)); /* Enable ADC, Start Conversion, Auto Trigger enabled, 
+	ADCSRA = ((1<<ADEN) | (1<<ADSC) | (1<<ADATE) | (1<<ADIE) | (6<<ADPS0)); /* Enable ADC, Start Conversion, Auto Trigger enabled, 
 																		Interrupt enabled, Prescale = 64  */
 	ADCSRB = (0<<ADTS0); // Select AutoTrigger Source to Free Running Mode
 }

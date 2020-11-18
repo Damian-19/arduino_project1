@@ -146,7 +146,7 @@ void adc_init(void)
 	ADMUX = ((1<<REFS0) | (0 << ADLAR) | (0<<MUX0));  // AVCC selected for VREF, ADC0 as ADC input
   e8:	80 e4       	ldi	r24, 0x40	; 64
   ea:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__DATA_REGION_ORIGIN__+0x1c>
-	ADCSRA = ((1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(6<<ADPS0)); /* Enable ADC, Start Conversion, Auto Trigger enabled, 
+	ADCSRA = ((1<<ADEN) | (1<<ADSC) | (1<<ADATE) | (1<<ADIE) | (6<<ADPS0)); /* Enable ADC, Start Conversion, Auto Trigger enabled, 
   ee:	8e ee       	ldi	r24, 0xEE	; 238
   f0:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <__DATA_REGION_ORIGIN__+0x1a>
 																		Interrupt enabled, Prescale = 64  */
@@ -163,7 +163,7 @@ void port_init(void)
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
   fa:	8f ef       	ldi	r24, 0xFF	; 255
   fc:	8a b9       	out	0x0a, r24	; 10
-	PORTD = 0;		// 
+	PORTD = 0;		// set PORTD pins to 0
   fe:	1b b8       	out	0x0b, r1	; 11
 	DDRB = 0b00000000; // set PORTB to inputs
  100:	14 b8       	out	0x04, r1	; 4
