@@ -61,7 +61,7 @@ void adc_init(void)
 	adc_flag = 0; // set if new adc result available
 	display_flag = 1; // initialize to 8-bit thermometer display
 	direction = 0; // start cylon eyes heading down (7->0)
-	active_pin = 0; // start cylon eyes at bit 7
+	active_pin = 7; // start cylon eyes at bit 7
 	
 	// ADC initialization
 	ADMUX = ((1<<REFS0) | (0 << ADLAR) | (0<<MUX0));  // AVCC selected for VREF, ADC0 as ADC input
