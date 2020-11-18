@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  000000f8  00000000  00000000  00001920  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003f1  00000000  00000000  00001a18  2**0
+ 10 .debug_str    000003fb  00000000  00000000  00001a18  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000001a9  00000000  00000000  00001e09  2**0
+ 11 .debug_loc    000001a9  00000000  00000000  00001e13  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000048  00000000  00000000  00001fb2  2**0
+ 12 .debug_ranges 00000048  00000000  00000000  00001fbc  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -154,11 +154,11 @@ void adc_init(void)
   f4:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <__DATA_REGION_ORIGIN__+0x1b>
   f8:	08 95       	ret
 
-000000fa <init>:
+000000fa <port_init>:
 /********************************
 * main initialization function 
 *********************************/
-void init(void)
+void port_init(void)
 {
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
   fa:	8f ef       	ldi	r24, 0xFF	; 255
@@ -436,12 +436,12 @@ void adc_display(int display_flag)
 ***********************************************/
 int main(void)
 {
-	timer_init();
+	timer_init(); // call initialisation for timer registers/variables
  2d0:	0e 94 48 00 	call	0x90	; 0x90 <timer_init>
-	adc_init();
+	adc_init(); // call initialisation for adc registers/variables
  2d4:	0e 94 62 00 	call	0xc4	; 0xc4 <adc_init>
-	init();
- 2d8:	0e 94 7d 00 	call	0xfa	; 0xfa <init>
+	port_init(); // call initialisation for port registers
+ 2d8:	0e 94 7d 00 	call	0xfa	; 0xfa <port_init>
 		{
 			if ((PINB & 0b00100000) == 0b00100000)
 			{
@@ -450,9 +450,9 @@ int main(void)
 					adc_display(display_flag = 1); // set to full 8-bit mode
  2dc:	c1 e0       	ldi	r28, 0x01	; 1
  2de:	d0 e0       	ldi	r29, 0x00	; 0
-	timer_init();
-	adc_init();
-	init();
+	timer_init(); // call initialisation for timer registers/variables
+	adc_init(); // call initialisation for adc registers/variables
+	port_init(); // call initialisation for port registers
     while(1)
 	{
 		if (adc_flag) // checks new adc result available

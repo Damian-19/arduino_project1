@@ -2,7 +2,9 @@
  * main.c
  *
  * Created: 28/10/2020 
- *  Author: Damian
+ * Author: Damian Larkin & James Cusack
+ *
+ * Program to satisfy ET4047 Project 1
  */ 
 
 
@@ -71,7 +73,7 @@ void adc_init(void)
 /********************************
 * main initialization function 
 *********************************/
-void init(void)
+void port_init(void)
 {
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
 	PORTD = 0;		// 
@@ -180,9 +182,9 @@ void adc_display(int display_flag)
 ***********************************************/
 int main(void)
 {
-	timer_init();
-	adc_init();
-	init();
+	timer_init(); // call initialisation for timer registers/variables
+	adc_init(); // call initialisation for adc registers/variables
+	port_init(); // call initialisation for port registers
     while(1)
 	{
 		if (adc_flag) // checks new adc result available
