@@ -433,9 +433,9 @@ void adc_display(int display_flag)
  2ce:	08 95       	ret
 
 000002d0 <main>:
-/***********************************************
-* main function
-***********************************************/
+* checks if buttons (PINB5 & PINB4) are pressed, 
+* and sets adc display to the appropriate mode
+****************************************************/
 int main(void)
 {
 	timer_init(); // call initialisation for timer registers/variables
@@ -445,9 +445,9 @@ int main(void)
 	port_init(); // call initialisation for port registers
  2d8:	0e 94 7d 00 	call	0xfa	; 0xfa <port_init>
 		{
-			if ((PINB & 0b00100000) == 0b00100000)
+			if ((PINB & 0b00100000) == 0b00100000) // check PINB bit 5 is 1 (not pressed)
 			{
-				if ((PINB & 0b00010000) == 0)
+				if ((PINB & 0b00010000) == 0) // check PINB bit 4 is 0 (pressed)
 				{
 					adc_display(display_flag = 1); // set to full 8-bit mode
  2dc:	c1 e0       	ldi	r28, 0x01	; 1
@@ -457,17 +457,17 @@ int main(void)
 	port_init(); // call initialisation for port registers
     while(1)
 	{
-		if (adc_flag) // checks new adc result available
+		if (adc_flag) // check new adc result available
  2e0:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <adc_flag>
  2e4:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <adc_flag+0x1>
  2e8:	89 2b       	or	r24, r25
  2ea:	d1 f3       	breq	.-12     	; 0x2e0 <main+0x10>
 		{
-			if ((PINB & 0b00100000) == 0b00100000)
+			if ((PINB & 0b00100000) == 0b00100000) // check PINB bit 5 is 1 (not pressed)
  2ec:	1d 9b       	sbis	0x03, 5	; 3
  2ee:	0e c0       	rjmp	.+28     	; 0x30c <main+0x3c>
 			{
-				if ((PINB & 0b00010000) == 0)
+				if ((PINB & 0b00010000) == 0) // check PINB bit 4 is 0 (pressed)
  2f0:	1c 99       	sbic	0x03, 4	; 3
  2f2:	f6 cf       	rjmp	.-20     	; 0x2e0 <main+0x10>
 				{
@@ -481,7 +481,7 @@ int main(void)
  306:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <adc_flag>
  30a:	ea cf       	rjmp	.-44     	; 0x2e0 <main+0x10>
 				}
-			} else if ((PINB & 0b00100000) == 0)
+			} else if ((PINB & 0b00100000) == 0) // check if PINB bit 5 is 0 (pressed)
  30c:	1d 99       	sbic	0x03, 5	; 3
  30e:	e8 cf       	rjmp	.-48     	; 0x2e0 <main+0x10>
 			{
@@ -540,11 +540,11 @@ ISR(TIMER0_OVF_vect) // timer0 ISR
  37a:	39 07       	cpc	r19, r25
  37c:	a8 f0       	brcs	.+42     	; 0x3a8 <__vector_16+0x7e>
 	{
-		if ((PINB & 0b00100000) == 0b00100000)
+		if ((PINB & 0b00100000) == 0b00100000) // check PINB bit 5 is 1 (not pressed)
  37e:	1d 9b       	sbis	0x03, 5	; 3
  380:	0b c0       	rjmp	.+22     	; 0x398 <__vector_16+0x6e>
 		{
-			if ((PINB & 0b00010000) == 0b00010000)
+			if ((PINB & 0b00010000) == 0b00010000) // check PINB bit 4 is 1 (not pressed)
  382:	1c 9b       	sbis	0x03, 4	; 3
  384:	11 c0       	rjmp	.+34     	; 0x3a8 <__vector_16+0x7e>
 			{
