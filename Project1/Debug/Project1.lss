@@ -497,10 +497,10 @@ int main(void)
  328:	db cf       	rjmp	.-74     	; 0x2e0 <main+0x10>
 
 0000032a <__vector_16>:
-		}
-	}
-}
-
+*
+* controls the time delay for the cylon pattern &
+* checks if the cylon should be in 8 or 4-bit mode
+******************************************************/
 ISR(TIMER0_OVF_vect) // timer0 ISR
 {
  32a:	1f 92       	push	r1
@@ -587,7 +587,10 @@ ISR(TIMER0_OVF_vect) // timer0 ISR
  3c8:	18 95       	reti
 
 000003ca <__vector_21>:
-
+*
+* controls the timer0 start & overflow for the cylon pattern &
+* saves the adc value for the adc thermometer display
+******************************************************************/
 ISR (ADC_vect) // adc ISR
 {
  3ca:	1f 92       	push	r1

@@ -76,7 +76,7 @@ void adc_init(void)
 void port_init(void)
 {
 	DDRD = 0xff;	// 0xff = 0b11111111; all ones
-	PORTD = 0;		// 
+	PORTD = 0;		// set PORTD pins to 0
 	DDRB = 0b00000000; // set PORTB to inputs
 	PORTB = 0b00110000; // enable pull up resistors on pins 4 & 5
 	
